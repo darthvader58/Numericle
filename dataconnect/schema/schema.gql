@@ -1,0 +1,42 @@
+type User @table {
+  username: String!
+  createdAt: Timestamp!
+  email: String
+  profilePictureUrl: String
+}
+
+type Game @table {
+  player: User!
+  targetSequence: String!
+  difficultyLevel: String!
+  maxAttempts: Int!
+  startedAt: Timestamp!
+  isDailyChallenge: Boolean!
+  completedAt: Timestamp
+  isWon: Boolean
+}
+
+type Guess @table {
+  game: Game!
+  guessedSequence: String!
+  attemptNumber: Int!
+  guessedAt: Timestamp!
+  feedbackCorrectItems: String
+  feedbackCorrectPositions: String
+}
+
+type Statistic @table {
+  user: User!
+  totalGamesPlayed: Int!
+  totalGamesWon: Int!
+  currentWinStreak: Int!
+  longestWinStreak: Int!
+  updatedAt: Timestamp!
+}
+
+type LeaderboardEntry @table {
+  user: User!
+  score: Int!
+  rank: Int!
+  updatedAt: Timestamp!
+}

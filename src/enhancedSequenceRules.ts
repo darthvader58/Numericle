@@ -145,6 +145,174 @@ export const sequenceRules: SequenceRule[] = [
     description: 'Catalan Numbers: Special sequence appearing in combinatorics'
   },
   
+  // === FAMOUS MATHEMATICAL SEQUENCES ===
+  {
+    name: 'mersenne_primes',
+    generate: (len) => {
+      // Mersenne primes: 2^p - 1 where result is prime
+      const mersenne = [3, 7, 31, 127, 8191, 131071, 524287];
+      return mersenne.slice(0, len);
+    },
+    description: 'Mersenne Primes: Primes of the form 2^p - 1'
+  },
+  {
+    name: 'pascal_row_sums',
+    generate: (len) => {
+      // Sum of each row in Pascal's triangle = 2^n
+      return Array.from({ length: len }, (_, i) => 2 ** i);
+    },
+    description: "Pascal's Row Sums: Sum of nth row in Pascal's triangle equals 2^n"
+  },
+  {
+    name: 'pascal_diagonal',
+    generate: (len) => {
+      // First diagonal of Pascal's triangle (natural numbers)
+      return Array.from({ length: len }, (_, i) => i + 1);
+    },
+    description: "Pascal's First Diagonal: Natural numbers from Pascal's triangle"
+  },
+  {
+    name: 'pascal_triangular',
+    generate: (len) => {
+      // Second diagonal of Pascal's triangle (triangular numbers)
+      return Array.from({ length: len }, (_, i) => ((i + 1) * (i + 2)) / 2);
+    },
+    description: "Pascal's Triangular Diagonal: Triangular numbers from Pascal's triangle"
+  },
+  {
+    name: 'sylvester_sequence',
+    generate: (len) => {
+      // Sylvester's sequence: a(n+1) = a(n)^2 - a(n) + 1
+      const seq = [2];
+      for (let i = 1; i < len; i++) {
+        const prev = seq[i - 1];
+        seq.push(prev * prev - prev + 1);
+      }
+      return seq.slice(0, len);
+    },
+    description: "Sylvester's Sequence: Each term is previous^2 - previous + 1"
+  },
+  {
+    name: 'somos_4',
+    generate: (len) => {
+      // Somos-4 sequence
+      const seq = [1, 1, 1, 1];
+      for (let i = 4; i < len; i++) {
+        seq.push((seq[i-1] * seq[i-3] + seq[i-2] * seq[i-2]) / seq[i-4]);
+      }
+      return seq.slice(0, len);
+    },
+    description: 'Somos-4 Sequence: Recursive sequence with surprising integer property'
+  },
+  {
+    name: 'perfect_numbers',
+    generate: (len) => {
+      // Perfect numbers: equal to sum of proper divisors
+      const perfect = [6, 28, 496, 8128, 33550336];
+      return perfect.slice(0, len);
+    },
+    description: 'Perfect Numbers: Numbers equal to the sum of their proper divisors'
+  },
+  {
+    name: 'lazy_caterer',
+    generate: (len) => {
+      // Maximum pieces from n cuts: (n^2 + n + 2) / 2
+      return Array.from({ length: len }, (_, i) => {
+        const n = i;
+        return (n * n + n + 2) / 2;
+      });
+    },
+    description: "Lazy Caterer's Sequence: Max pieces from n straight cuts of a disk"
+  },
+  {
+    name: 'bell_numbers',
+    generate: (len) => {
+      // Bell numbers: number of partitions of a set
+      const bell = [1, 1, 2, 5, 15, 52, 203, 877, 4140];
+      return bell.slice(0, len);
+    },
+    description: 'Bell Numbers: Number of ways to partition a set'
+  },
+  {
+    name: 'motzkin_numbers',
+    generate: (len) => {
+      // Motzkin numbers
+      const motzkin = [1, 1, 2, 4, 9, 21, 51, 127, 323];
+      return motzkin.slice(0, len);
+    },
+    description: 'Motzkin Numbers: Paths from (0,0) to (n,0) with specific rules'
+  },
+  {
+    name: 'pell_numbers',
+    generate: (len) => {
+      // Pell numbers: P(n) = 2*P(n-1) + P(n-2)
+      const pell = [0, 1];
+      for (let i = 2; i < len; i++) {
+        pell.push(2 * pell[i - 1] + pell[i - 2]);
+      }
+      return pell.slice(0, len);
+    },
+    description: 'Pell Numbers: Recursive sequence P(n) = 2P(n-1) + P(n-2)'
+  },
+  {
+    name: 'padovan_sequence',
+    generate: (len) => {
+      // Padovan sequence: P(n) = P(n-2) + P(n-3)
+      const padovan = [1, 1, 1];
+      for (let i = 3; i < len; i++) {
+        padovan.push(padovan[i - 2] + padovan[i - 3]);
+      }
+      return padovan.slice(0, len);
+    },
+    description: 'Padovan Sequence: P(n) = P(n-2) + P(n-3), related to plastic number'
+  },
+  {
+    name: 'partition_numbers',
+    generate: (len) => {
+      // Partition numbers: ways to write n as sum of positive integers
+      const partition = [1, 1, 2, 3, 5, 7, 11, 15, 22, 30];
+      return partition.slice(0, len);
+    },
+    description: 'Partition Numbers: Ways to write n as sum of positive integers'
+  },
+  {
+    name: 'stern_brocot',
+    generate: (len) => {
+      // Stern-Brocot sequence (numerators)
+      const seq = [1, 1];
+      for (let i = 2; i < len; i++) {
+        if (i % 2 === 0) {
+          seq.push(seq[i / 2 - 1]);
+        } else {
+          seq.push(seq[Math.floor(i / 2)] + seq[Math.floor(i / 2) + 1]);
+        }
+      }
+      return seq.slice(0, len);
+    },
+    description: 'Stern-Brocot Sequence: Related to the Stern-Brocot tree of fractions'
+  },
+  {
+    name: 'recaman_sequence',
+    generate: (len) => {
+      // Recamán's sequence
+      const seq = [0];
+      const seen = new Set([0]);
+      for (let i = 1; i < len; i++) {
+        const backward = seq[i - 1] - i;
+        if (backward > 0 && !seen.has(backward)) {
+          seq.push(backward);
+          seen.add(backward);
+        } else {
+          const forward = seq[i - 1] + i;
+          seq.push(forward);
+          seen.add(forward);
+        }
+      }
+      return seq.slice(0, len);
+    },
+    description: "Recamán's Sequence: Subtract if possible and not seen, else add"
+  },
+  
   // === DIGIT-BASED PATTERNS ===
   {
     name: 'digit_sum_multiples',
@@ -613,11 +781,3 @@ export const sequenceRules: SequenceRule[] = [
     description: `Complex: n² + ${i + 1}n³ - ${i % 5}`
   }))
 ];
-
-// Difficulty categorization
-export const difficultyLevels = {
-  easy: ['even_numbers', 'odd_numbers', 'arithmetic_3', 'squares', 'powers_of_2', 'linear_2', 'linear_3', 'linear_4', 'linear_5'],
-  medium: ['fibonacci', 'triangular', 'cubes', 'arithmetic_5_plus_2', 'primes', 'lucas', 'hexagonal', 'geom_1', 'geom_2'],
-  hard: ['tribonacci', 'pentagonal', 'catalan', 'factorial', 'powers_alternating', 'sum_of_squares', 'poly_43', 'poly_44'],
-  expert: ['collatz_steps', 'sum_of_divisors', 'n_plus_reverse', 'digital_root', 'perfect_squares_gaps', 'difference_of_squares']
-};

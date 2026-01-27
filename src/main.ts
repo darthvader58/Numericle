@@ -1,5 +1,5 @@
 import './style.css';
-import { getDailyPuzzleId, generateDailyPuzzle, getRuleDescription } from './puzzleGenerator';
+import { getDailyPuzzleId, generateDailyPuzzle, getRuleDescription, getMaxDigitsForAllSequences } from './puzzleGenerator';
 import { checkGuess, isWinningGuess, generateShareText } from './gameLogic';
 import { saveGameState, loadGameState, hasPlayedToday } from './storage';
 import { signUpWithEmail, signInWithEmail, signInWithGoogle, signOut, getCurrentUser } from './auth';
@@ -10,7 +10,8 @@ import { showLandingPage } from './landing';
 import type { GameState } from './types';
 
 const MAX_ATTEMPTS = 10;
-const MAX_HINTS = 1;
+const MAX_HINTS = 5;
+const MAX_DIGITS = getMaxDigitsForAllSequences(); // Fixed width for all puzzles
 let currentPuzzle = generateDailyPuzzle(getDailyPuzzleId());
 let gameState: GameState;
 let currentUser = getCurrentUser();
@@ -47,7 +48,7 @@ function initGame() {
       
       <div id="input-section">
         <div class="input-row">
-          ${Array(7).fill(0).map((_, i) => `<input type="text" inputmode="numeric" maxlength="2" class="sequence-input" data-index="${i}" />`).join('')}
+          ${Array(7).fill(0).map((_, i) => `<input type="text" inputmode="numeric" maxlength="${MAX_DIGITS}" class="sequence-input" data-index="${i}" />`).join('')}
         </div>
         <button id="submit-btn">Submit Guess</button>
         <button id="hint-btn" class="hint-btn">💡 Use Hint (${MAX_HINTS} left)</button>
@@ -191,24 +192,22 @@ function setupEventListeners() {
     input.addEventListener('input', () => {
       let value = input.value.replace(/\D/g, ''); // Remove non-digits
       
-      // Limit to 2 digits
-      if (value.length > 2) {
-        value = value.slice(0, 2);
+      // Limit to MAX_DIGITS
+      if (value.length > MAX_DIGITS) {
+        value = value.slice(0, MAX_DIGITS);
       }
       
       input.value = value;
       
-      // Auto-advance to next input when 2 digits are entered
-      if (value.length === 2 && index < inputs.length - 1) {
+      // Auto-advance to next input when MAX_DIGITS are entered
+      if (value.length === MAX_DIGITS && index < inputs.length - 1) {
         inputs[index + 1].focus();
       }
     });
     
-    // Format on blur (when leaving the input)
+    // No padding on blur - keep it simple and clear for users
     input.addEventListener('blur', () => {
-      if (input.value.length === 1) {
-        input.value = '0' + input.value;
-      }
+      // Just validate, don't modify the display
     });
   });
 
@@ -445,9 +444,9 @@ function handleSubmit() {
       return;
     }
     
-    // Validate it's a 1 or 2 digit number (0-99)
-    if (value < 0 || value > 99) {
-      showMessage('Numbers must be between 0 and 99', 'error');
+    // Validate it's a valid number (no upper limit now)
+    if (value < 0) {
+      showMessage('Numbers must be positive', 'error');
       return;
     }
     

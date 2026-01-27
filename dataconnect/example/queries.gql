@@ -1,0 +1,27 @@
+mutation CreateNewUser($username: String!, $email: String!) @auth(level: USER) {
+  user_insert(data: { username: $username, email: $email, createdAt_expr: "request.time" })
+}
+
+query GetMyStatistics @auth(level: USER) {
+  statistics(where: { userId: { eq_expr: "auth.uid" } }) {
+    currentWinStreak
+    longestWinStreak
+    totalGamesPlayed
+    totalGamesWon
+    updatedAt
+  }
+}
+
+mutation StartNewGame($difficultyLevel: String!, $maxAttempts: Int!, $targetSequence: String!) @auth(level: USER) {
+  game_insert(data: { playerId_expr: "auth.uid", difficultyLevel: $difficultyLevel, maxAttempts: $maxAttempts, targetSequence: $targetSequence, startedAt_expr: "request.time", isDailyChallenge: false })
+}
+
+query GetLeaderboard @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  leaderboardEntries(orderBy: [{ score: DESC }], limit: 10) {
+    user {
+      username
+    }
+    rank
+    score
+  }
+}
