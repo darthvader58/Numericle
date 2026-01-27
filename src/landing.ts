@@ -20,11 +20,20 @@ export function showLandingPage(onStart: () => void): void {
         
         <div class="landing-info">
           <div class="info-item">
-            <span class="info-icon">🎯</span>
-            <p>Guess the 7-8 number sequence in 10 guesses</p>
+            <svg class="info-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <circle cx="12" cy="17" r="0.5" fill="currentColor"></circle>
+            </svg>
+            <p>Guess the 7-number sequence in 10 guesses</p>
           </div>
           <div class="info-item">
-            <span class="info-icon">🧠</span>
+            <svg class="info-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+              <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+              <path d="M2 2l7.586 7.586"></path>
+              <circle cx="11" cy="11" r="2"></circle>
+            </svg>
             <p>Discover mathematical patterns and rules</p>
           </div>
         </div>
@@ -65,7 +74,11 @@ function showSignInModal(onStart: () => void): void {
     </form>
     <div class="auth-divider">or</div>
     <button id="google-signin" class="google-btn">
-      <span>🔐</span> Sign in with Google
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+      Sign in with Google
     </button>
     <div class="auth-divider">
       <a href="#" id="switch-signup">Don't have an account? Create one</a>
@@ -126,7 +139,11 @@ function showSignUpModal(onStart: () => void): void {
     </form>
     <div class="auth-divider">or</div>
     <button id="google-signup" class="google-btn">
-      <span>🔐</span> Sign up with Google
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+      Sign up with Google
     </button>
     <div class="auth-divider">
       <a href="#" id="switch-signin">Already have an account? Sign in</a>

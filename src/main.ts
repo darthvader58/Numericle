@@ -35,7 +35,12 @@ function initGame() {
   
   app.innerHTML = `
     <header>
-      <button class="auth-btn" id="auth-btn">👤</button>
+      <button class="auth-btn" id="auth-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </button>
       <div class="logo-container">
         <span class="logo">ℕ</span>
         <h1>Numericle</h1>
@@ -51,7 +56,14 @@ function initGame() {
           ${Array(7).fill(0).map((_, i) => `<input type="text" inputmode="numeric" maxlength="${MAX_DIGITS}" class="sequence-input" data-index="${i}" />`).join('')}
         </div>
         <button id="submit-btn">Submit Guess</button>
-        <button id="hint-btn" class="hint-btn">💡 Use Hint (${MAX_HINTS} left)</button>
+        <button id="hint-btn" class="hint-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18h6"></path>
+            <path d="M10 22h4"></path>
+            <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8a6 6 0 0 0-12 0c0 1.33.47 2.48 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path>
+          </svg>
+          Use Hint (${MAX_HINTS} left)
+        </button>
       </div>
       
       <div id="message"></div>
@@ -227,7 +239,21 @@ function setupAuthListener() {
 
 function updateAuthButton() {
   const authBtn = document.querySelector<HTMLButtonElement>('#auth-btn')!;
-  authBtn.textContent = currentUser ? '📊' : '👤';
+  if (currentUser) {
+    authBtn.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="1" x2="12" y2="23"></line>
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+      </svg>
+    `;
+  } else {
+    authBtn.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    `;
+  }
 }
 
 function handleAuthClick() {
@@ -249,7 +275,11 @@ async function showAuthModal() {
     </form>
     <div class="auth-divider">or</div>
     <button id="google-signin" class="google-btn">
-      <span>🔐</span> Sign in with Google
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+      Sign in with Google
     </button>
     <div class="auth-divider">Don't have an account?</div>
     <button id="show-signup">Create Account</button>
@@ -296,7 +326,11 @@ function showSignUpForm() {
     </form>
     <div class="auth-divider">or</div>
     <button id="google-signup" class="google-btn">
-      <span>🔐</span> Sign up with Google
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+      Sign up with Google
     </button>
     <div class="auth-divider">Already have an account?</div>
     <button id="show-signin">Sign In</button>
@@ -375,7 +409,12 @@ async function showStatsModal() {
           </div>
           <div>
             <strong>${entry.gamesWon}</strong> wins
-            <span style="color: var(--key-bg); margin-left: 8px;">🔥 ${entry.currentStreak}</span>
+            <span style="color: var(--key-bg); margin-left: 8px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+              </svg>
+              ${entry.currentStreak}
+            </span>
           </div>
         </li>
       `).join('')}
@@ -422,7 +461,14 @@ function handleHint() {
 function updateHintButton() {
   const hintBtn = document.querySelector<HTMLButtonElement>('#hint-btn')!;
   const remaining = MAX_HINTS - gameState.hintsUsed;
-  hintBtn.textContent = `💡 Use Hint (${remaining} left)`;
+  hintBtn.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M9 18h6"></path>
+      <path d="M10 22h4"></path>
+      <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8a6 6 0 0 0-12 0c0 1.33.47 2.48 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path>
+    </svg>
+    Use Hint (${remaining} left)
+  `;
   hintBtn.disabled = gameState.isComplete || remaining === 0;
 }
 

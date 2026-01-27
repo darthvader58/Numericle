@@ -2,9 +2,6 @@ import { doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, server
 import { db } from './firebase';
 import type { UserStats, LeaderboardEntry, GameState } from './types';
 
-/**
- * Initialize a new user in Firestore
- */
 export async function createUser(userId: string, username: string, email: string): Promise<void> {
   if (!db) return;
   
@@ -24,9 +21,6 @@ export async function createUser(userId: string, username: string, email: string
   await setDoc(doc(db, 'users', userId), userData);
 }
 
-/**
- * Save user stats to Firestore
- */
 export async function saveUserStats(userId: string, stats: UserStats): Promise<void> {
   if (!db) return;
   
@@ -38,9 +32,6 @@ export async function saveUserStats(userId: string, stats: UserStats): Promise<v
   await setDoc(doc(db, 'users', userId), updateData, { merge: true });
 }
 
-/**
- * Get user stats from Firestore
- */
 export async function getUserStats(userId: string): Promise<UserStats | null> {
   if (!db) return null;
   const docRef = doc(db, 'users', userId);
@@ -60,9 +51,6 @@ export async function getUserStats(userId: string): Promise<UserStats | null> {
   };
 }
 
-/**
- * Update user stats after completing a game
- */
 export async function updateStatsAfterGame(userId: string, gameState: GameState): Promise<void> {
   if (!db) return;
   const stats = await getUserStats(userId);
@@ -91,14 +79,9 @@ export async function updateStatsAfterGame(userId: string, gameState: GameState)
   
   stats.lastPlayedDate = new Date().toISOString().split('T')[0];
   await saveUserStats(userId, stats);
-  
-  // Update leaderboard entry
   await updateLeaderboardEntry(userId, stats);
 }
 
-/**
- * Update leaderboard entry for a user (denormalized for performance)
- */
 async function updateLeaderboardEntry(userId: string, stats: UserStats): Promise<void> {
   if (!db) return;
   
@@ -125,9 +108,6 @@ async function updateLeaderboardEntry(userId: string, stats: UserStats): Promise
   await setDoc(doc(db, 'leaderboard', userId), leaderboardData);
 }
 
-/**
- * Get top players from leaderboard
- */
 export async function getLeaderboard(limitCount: number = 10): Promise<LeaderboardEntry[]> {
   if (!db) return [];
   try {
@@ -155,9 +135,6 @@ export async function getLeaderboard(limitCount: number = 10): Promise<Leaderboa
   }
 }
 
-/**
- * Save game state to Firestore (for cross-device sync)
- */
 export async function saveGameState(userId: string, gameState: GameState): Promise<void> {
   if (!db) return;
   
@@ -169,9 +146,6 @@ export async function saveGameState(userId: string, gameState: GameState): Promi
   await setDoc(doc(db, 'gameStates', userId), stateData);
 }
 
-/**
- * Load game state from Firestore
- */
 export async function loadGameState(userId: string): Promise<GameState | null> {
   if (!db) return null;
   
