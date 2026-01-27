@@ -631,3 +631,42 @@ button:disabled {
     font-size: 13px;
   }
 }
+
+/* Solution Display */
+.solution-info {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(58, 58, 60, 0.3);
+  border-radius: 8px;
+  text-align: left;
+}
+
+.solution-sequence {
+  margin-bottom: 12px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.solution-rule {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--present);
+}
+
+.solution-sequence strong,
+.solution-rule strong {
+  color: var(--text);
+  display: block;
+  margin-bottom: 4px;
+}
+
+@media (max-width: 480px) {
+  .solution-info {
+    padding: 16px;
+  }
+  
+  .solution-sequence,
+  .solution-rule {
+    font-size: 14px;
+  }
+}

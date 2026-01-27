@@ -22,6 +22,11 @@ export function generateDailyPuzzle(date: string): DailyPuzzle {
   };
 }
 
+export function getRuleDescription(ruleName: string): string {
+  const rule = sequenceRules.find(r => r.name === ruleName);
+  return rule ? rule.description : 'Unknown rule';
+}
+
 function hashCode(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {

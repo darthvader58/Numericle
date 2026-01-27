@@ -1,5 +1,5 @@
 import './style.css';
-import { getDailyPuzzleId, generateDailyPuzzle } from './puzzleGenerator';
+import { getDailyPuzzleId, generateDailyPuzzle, getRuleDescription } from './puzzleGenerator';
 import { checkGuess, isWinningGuess, generateShareText } from './gameLogic';
 import { saveGameState, loadGameState, hasPlayedToday } from './storage';
 import { signUpWithEmail, signInWithEmail, signInWithGoogle, signOut, getCurrentUser } from './auth';
@@ -122,7 +122,7 @@ function getModalsHTML(): string {
         
         <h3>Tips</h3>
         <p>• You're discovering the <em>rule</em> that generates the sequence</p>
-        <p>• Think: arithmetic, geometric, squares, primes, Fibonacci...</p>
+        <p>• Think: arithmetic, geometric, polynomials, primes, Fibonacci...</p>
         <p>• Use hints (${MAX_HINTS} per game) to reveal a number</p>
         <p>• New puzzle daily at midnight GMT</p>
         <p>• Sign in to track stats and compete on leaderboard!</p>
@@ -532,14 +532,41 @@ function showMessage(text: string, type: 'error' | 'success' | 'info' = 'info') 
 async function endGame() {
   const inputSection = document.querySelector<HTMLDivElement>('#input-section')!;
   const stats = document.querySelector<HTMLDivElement>('#stats')!;
+  const message = document.querySelector<HTMLDivElement>('#message')!;
   
   inputSection.style.display = 'none';
   stats.style.display = 'block';
 
+  const ruleDescription = getRuleDescription(currentPuzzle.rule);
+  
   if (gameState.isWon) {
-    showMessage(`🎉 You discovered the sequence in ${gameState.results.length} ${gameState.results.length === 1 ? 'guess' : 'guesses'}!`, 'success');
+    message.innerHTML = `
+      <div class="success">
+        🎉 You discovered the sequence in ${gameState.results.length} ${gameState.results.length === 1 ? 'guess' : 'guesses'}!
+      </div>
+      <div class="solution-info">
+        <div class="solution-sequence">
+          <strong>Solution:</strong> ${currentPuzzle.sequence.join(', ')}
+        </div>
+        <div class="solution-rule">
+          <strong>Rule:</strong> ${ruleDescription}
+        </div>
+      </div>
+    `;
   } else {
-    showMessage(`The sequence was: ${currentPuzzle.sequence.join(', ')}`, 'info');
+    message.innerHTML = `
+      <div class="info">
+        Better luck next time!
+      </div>
+      <div class="solution-info">
+        <div class="solution-sequence">
+          <strong>Solution:</strong> ${currentPuzzle.sequence.join(', ')}
+        </div>
+        <div class="solution-rule">
+          <strong>Rule:</strong> ${ruleDescription}
+        </div>
+      </div>
+    `;
   }
   
   // Update Firebase stats if user is logged in
