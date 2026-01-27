@@ -7,6 +7,11 @@ import { getUserStats, updateStatsAfterGame, getLeaderboard } from './database';
 import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { showLandingPage } from './landing';
+import { getHeaderHTML } from './components/header';
+import { getGameBoardHTML } from './components/gameBoard';
+import { getFooterHTML } from './components/footer';
+import { getHelpModalHTML, getAuthModalHTML, getStatsModalHTML, getSignInFormHTML, getSignUpFormHTML } from './components/modals';
+import { icons } from './components/icons';
 import type { GameState } from './types';
 
 const MAX_ATTEMPTS = 10;
@@ -34,45 +39,9 @@ function initGame() {
   const app = document.querySelector<HTMLDivElement>('#app')!;
   
   app.innerHTML = `
-    <header>
-      <button class="auth-btn" id="auth-btn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-      </button>
-      <div class="logo-container">
-        <span class="logo">ℕ</span>
-        <h1>Numericle</h1>
-      </div>
-      <button class="help-btn" id="help-btn" aria-label="How to play">?</button>
-    </header>
-    
-    <main>
-      <div id="game-board"></div>
-      
-      <div id="input-section">
-        <div class="input-row">
-          ${Array(7).fill(0).map((_, i) => `<input type="text" inputmode="numeric" maxlength="${MAX_DIGITS}" class="sequence-input" data-index="${i}" />`).join('')}
-        </div>
-        <button id="submit-btn">Submit Guess</button>
-        <button id="hint-btn" class="hint-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 18h6"></path>
-            <path d="M10 22h4"></path>
-            <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8a6 6 0 0 0-12 0c0 1.33.47 2.48 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path>
-          </svg>
-          Use Hint (${MAX_HINTS} left)
-        </button>
-      </div>
-      
-      <div id="message"></div>
-      
-      <div id="stats" style="display: none;">
-        <button id="share-btn">Share Result</button>
-      </div>
-    </main>
-    
+    ${getHeaderHTML()}
+    ${getGameBoardHTML(MAX_DIGITS, MAX_HINTS)}
+    ${getFooterHTML()}
     ${getModalsHTML()}
   `;
 
@@ -103,58 +72,9 @@ function initGame() {
 
 function getModalsHTML(): string {
   return `
-    <div id="help-modal" class="modal">
-      <div class="modal-content">
-        <button class="close-btn" data-modal="help-modal">&times;</button>
-        <h2>How to Play</h2>
-        <p>Guess the hidden sequence in ${MAX_ATTEMPTS} tries. Each guess must be 7 numbers.</p>
-        
-        <p>After each guess, the color of the tiles will change to show how close your guess was:</p>
-        
-        <h3>Examples</h3>
-        <div class="example-row">
-          ${[2, 5, 10, 17, 26, 37, 50].map((n, i) => 
-            `<div class="example-cell ${i === 0 ? 'correct' : ''}">${n}</div>`
-          ).join('')}
-        </div>
-        <p><strong>2</strong> is in the sequence and in the correct position.</p>
-        
-        <div class="example-row">
-          ${[1, 4, 9, 16, 25, 36, 49].map((n, i) => 
-            `<div class="example-cell ${i === 2 ? 'present' : ''}">${n}</div>`
-          ).join('')}
-        </div>
-        <p><strong>9</strong> is in the sequence but in the wrong position.</p>
-        
-        <div class="example-row">
-          ${[3, 7, 11, 15, 19, 23, 27].map((n, i) => 
-            `<div class="example-cell ${i === 1 ? 'absent' : ''}">${n}</div>`
-          ).join('')}
-        </div>
-        <p><strong>7</strong> is not in the sequence.</p>
-        
-        <h3>Tips</h3>
-        <p>• You're discovering the <em>rule</em> that generates the sequence</p>
-        <p>• Think: arithmetic, geometric, polynomials, primes, Fibonacci...</p>
-        <p>• Use hints (${MAX_HINTS} per game) to reveal a number</p>
-        <p>• New puzzle daily at midnight GMT</p>
-        <p>• Sign in to track stats and compete on leaderboard!</p>
-      </div>
-    </div>
-    
-    <div id="auth-modal" class="modal">
-      <div class="modal-content">
-        <button class="close-btn" data-modal="auth-modal">&times;</button>
-        <div id="auth-content"></div>
-      </div>
-    </div>
-    
-    <div id="stats-modal" class="modal">
-      <div class="modal-content">
-        <button class="close-btn" data-modal="stats-modal">&times;</button>
-        <div id="stats-content"></div>
-      </div>
-    </div>
+    ${getHelpModalHTML()}
+    ${getAuthModalHTML()}
+    ${getStatsModalHTML()}
   `;
 }
 
@@ -240,19 +160,9 @@ function setupAuthListener() {
 function updateAuthButton() {
   const authBtn = document.querySelector<HTMLButtonElement>('#auth-btn')!;
   if (currentUser) {
-    authBtn.innerHTML = `
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="12" y1="1" x2="12" y2="23"></line>
-        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-      </svg>
-    `;
+    authBtn.innerHTML = icons.stats;
   } else {
-    authBtn.innerHTML = `
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-        <circle cx="12" cy="7" r="4"></circle>
-      </svg>
-    `;
+    authBtn.innerHTML = icons.user;
   }
 }
 
@@ -265,27 +175,13 @@ function handleAuthClick() {
 }
 
 async function showAuthModal() {
-  const authContent = document.querySelector<HTMLDivElement>('#auth-content')!;
-  authContent.innerHTML = `
-    <h2>Sign In</h2>
-    <form id="signin-form" class="auth-form">
-      <input type="email" id="signin-email" placeholder="Email" required />
-      <input type="password" id="signin-password" placeholder="Password" required />
-      <button type="submit">Sign In</button>
-    </form>
-    <div class="auth-divider">or</div>
-    <button id="google-signin" class="google-btn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-      </svg>
-      Sign in with Google
-    </button>
-    <div class="auth-divider">Don't have an account?</div>
-    <button id="show-signup">Create Account</button>
-  `;
-  
   openModal('auth-modal');
+  showSignInForm();
+}
+
+function showSignInForm() {
+  const authContent = document.querySelector<HTMLDivElement>('#auth-content')!;
+  authContent.innerHTML = getSignInFormHTML();
   
   document.getElementById('signin-form')!.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -316,25 +212,7 @@ async function showAuthModal() {
 
 function showSignUpForm() {
   const authContent = document.querySelector<HTMLDivElement>('#auth-content')!;
-  authContent.innerHTML = `
-    <h2>Create Account</h2>
-    <form id="signup-form" class="auth-form">
-      <input type="text" id="signup-username" placeholder="Username" required />
-      <input type="email" id="signup-email" placeholder="Email" required />
-      <input type="password" id="signup-password" placeholder="Password (min 6 chars)" required minlength="6" />
-      <button type="submit">Create Account</button>
-    </form>
-    <div class="auth-divider">or</div>
-    <button id="google-signup" class="google-btn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-      </svg>
-      Sign up with Google
-    </button>
-    <div class="auth-divider">Already have an account?</div>
-    <button id="show-signin">Sign In</button>
-  `;
+  authContent.innerHTML = getSignUpFormHTML();
   
   document.getElementById('signup-form')!.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -361,7 +239,7 @@ function showSignUpForm() {
     }
   });
   
-  document.getElementById('show-signin')!.addEventListener('click', showAuthModal);
+  document.getElementById('show-signin')!.addEventListener('click', showSignInForm);
 }
 
 async function showStatsModal() {
@@ -410,9 +288,7 @@ async function showStatsModal() {
           <div>
             <strong>${entry.gamesWon}</strong> wins
             <span style="color: var(--key-bg); margin-left: 8px;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
-              </svg>
+              ${icons.star}
               ${entry.currentStreak}
             </span>
           </div>
@@ -462,11 +338,7 @@ function updateHintButton() {
   const hintBtn = document.querySelector<HTMLButtonElement>('#hint-btn')!;
   const remaining = MAX_HINTS - gameState.hintsUsed;
   hintBtn.innerHTML = `
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M9 18h6"></path>
-      <path d="M10 22h4"></path>
-      <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8a6 6 0 0 0-12 0c0 1.33.47 2.48 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path>
-    </svg>
+    ${icons.hint}
     Use Hint (${remaining} left)
   `;
   hintBtn.disabled = gameState.isComplete || remaining === 0;
