@@ -542,7 +542,7 @@ async function endGame() {
   if (gameState.isWon) {
     message.innerHTML = `
       <div class="success">
-        🎉 You discovered the sequence in ${gameState.results.length} ${gameState.results.length === 1 ? 'guess' : 'guesses'}!
+        You discovered the sequence in ${gameState.results.length} ${gameState.results.length === 1 ? 'guess' : 'guesses'}!
       </div>
       <div class="solution-info">
         <div class="solution-sequence">
