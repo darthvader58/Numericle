@@ -20,9 +20,11 @@ export function isWinningGuess(results: GuessResult[]): boolean {
   return results.every(r => r === 'correct');
 }
 
-export function generateShareText(attempts: GuessResult[][], puzzleId: string, won: boolean): string {
+export function generateShareText(attempts: GuessResult[][], puzzleId: string, won: boolean, hintsUsed: number = 0, revealedIndices: number[] = []): string {
   const emoji = attempts.map(attempt => 
-    attempt.map(result => {
+    attempt.map((result, index) => {
+      // If this position was revealed by a hint, show blue
+      if (revealedIndices.includes(index)) return '🟦';
       if (result === 'correct') return '🟩';
       if (result === 'present') return '🟨';
       return '⬜';
@@ -30,6 +32,7 @@ export function generateShareText(attempts: GuessResult[][], puzzleId: string, w
   ).join('\n');
   
   const status = won ? `${attempts.length}/10` : 'X/10';
-  const result = won ? 'You won! 🎉' : 'You lost 😔';
-  return `Numericle ${puzzleId}\n${result}\n${status}\n\n${emoji}`;
+  const result = won ? 'You won! :)' : 'You lost :(';
+  const hintsLine = hintsUsed > 0 ? ` (${hintsUsed} hint${hintsUsed > 1 ? 's' : ''})` : '';
+  return `Numericle ${puzzleId}\n${result}\n${status}${hintsLine}\n\n${emoji}`;
 }

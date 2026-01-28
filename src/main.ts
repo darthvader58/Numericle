@@ -497,7 +497,7 @@ async function endGame() {
 }
 
 function handleShare() {
-  const shareText = generateShareText(gameState.results, gameState.dailyPuzzleId, gameState.isWon);
+  const shareText = generateShareText(gameState.results, gameState.dailyPuzzleId, gameState.isWon, gameState.hintsUsed, gameState.revealedIndices);
   navigator.clipboard.writeText(shareText).then(() => {
     showMessage('Copied to clipboard!', 'success');
   }).catch(() => {
