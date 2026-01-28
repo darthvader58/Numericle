@@ -6,10 +6,10 @@ export function getHeaderHTML(): string {
       <button class="auth-btn" id="auth-btn">
         ${icons.user}
       </button>
-      <div class="logo-container">
+      <a href="/" class="logo-container" id="home-link">
         <span class="logo">ℕ</span>
-        <h1>Numericle</h1>
-      </div>
+        <h1>umericle</h1>
+      </a>
       <button class="help-btn" id="help-btn" aria-label="How to play">?</button>
     </header>
   `;

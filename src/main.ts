@@ -3,14 +3,14 @@ import { getDailyPuzzleId, generateDailyPuzzle, getRuleDescription, getMaxDigits
 import { checkGuess, isWinningGuess, generateShareText } from './gameLogic';
 import { saveGameState, loadGameState, hasPlayedToday } from './storage';
 import { signUpWithEmail, signInWithEmail, signInWithGoogle, signOut, getCurrentUser } from './auth';
-import { getUserStats, updateStatsAfterGame, getLeaderboard } from './database';
+import { getUserStats, updateStatsAfterGame, submitFeedback } from './database';
 import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { showLandingPage } from './landing';
 import { getHeaderHTML } from './components/header';
 import { getGameBoardHTML } from './components/gameBoard';
 import { getFooterHTML } from './components/footer';
-import { getHelpModalHTML, getAuthModalHTML, getStatsModalHTML, getSignInFormHTML, getSignUpFormHTML } from './components/modals';
+import { getHelpModalHTML, getAuthModalHTML, getStatsModalHTML, getSignInFormHTML, getSignUpFormHTML, getFeedbackModalHTML } from './components/modals';
 import { getCountdownHTML, startCountdown } from './components/countdown';
 import { icons } from './components/icons';
 import type { GameState } from './types';
@@ -76,6 +76,7 @@ function getModalsHTML(): string {
     ${getHelpModalHTML()}
     ${getAuthModalHTML()}
     ${getStatsModalHTML()}
+    ${getFeedbackModalHTML()}
   `;
 }
 
@@ -85,11 +86,24 @@ function setupEventListeners() {
   const inputs = document.querySelectorAll<HTMLInputElement>('.sequence-input');
   const helpBtn = document.querySelector<HTMLButtonElement>('#help-btn')!;
   const authBtn = document.querySelector<HTMLButtonElement>('#auth-btn')!;
+  const supportBtn = document.querySelector<HTMLButtonElement>('#support-btn');
+  const homeLink = document.querySelector<HTMLAnchorElement>('#home-link');
   
   submitBtn.addEventListener('click', handleSubmit);
   hintBtn.addEventListener('click', handleHint);
   helpBtn.addEventListener('click', () => openModal('help-modal'));
   authBtn.addEventListener('click', handleAuthClick);
+  
+  if (supportBtn) {
+    supportBtn.addEventListener('click', showFeedbackModal);
+  }
+  
+  if (homeLink) {
+    homeLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      location.reload();
+    });
+  }
   
   document.querySelectorAll('.close-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -249,7 +263,6 @@ async function showStatsModal() {
   if (!currentUser) return;
   
   const stats = await getUserStats(currentUser.uid);
-  const leaderboard = await getLeaderboard();
   
   if (!stats) return;
   
@@ -277,25 +290,6 @@ async function showStatsModal() {
         <div class="stat-label">Max Streak</div>
       </div>
     </div>
-    
-    <h3>Leaderboard</h3>
-    <ul class="leaderboard-list">
-      ${leaderboard.map((entry, index) => `
-        <li class="leaderboard-item">
-          <div class="user-info">
-            <span class="rank">#${index + 1}</span>
-            <span>${entry.username}</span>
-          </div>
-          <div>
-            <strong>${entry.gamesWon}</strong> wins
-            <span style="color: var(--key-bg); margin-left: 8px;">
-              ${icons.star}
-              ${entry.currentStreak}
-            </span>
-          </div>
-        </li>
-      `).join('')}
-    </ul>
     
     <button id="signout-btn" style="margin-top: 20px;">Sign Out</button>
   `;
@@ -508,5 +502,35 @@ function handleShare() {
     showMessage('Copied to clipboard!', 'success');
   }).catch(() => {
     showMessage('Failed to copy', 'error');
+  });
+}
+
+function showFeedbackModal() {
+  openModal('feedback-modal');
+  
+  const feedbackForm = document.getElementById('feedback-form') as HTMLFormElement;
+  const feedbackStatus = document.getElementById('feedback-status')!;
+  
+  feedbackForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const name = (document.getElementById('feedback-name') as HTMLInputElement).value;
+    const email = (document.getElementById('feedback-email') as HTMLInputElement).value;
+    const type = (document.getElementById('feedback-type') as HTMLSelectElement).value;
+    const message = (document.getElementById('feedback-message') as HTMLTextAreaElement).value;
+    
+    try {
+      feedbackStatus.innerHTML = '<p style="color: var(--accent);">Submitting...</p>';
+      await submitFeedback(name, email, type, message);
+      feedbackStatus.innerHTML = '<p style="color: var(--correct);">Thank you! Your feedback has been submitted.</p>';
+      feedbackForm.reset();
+      
+      setTimeout(() => {
+        closeModal('feedback-modal');
+        feedbackStatus.innerHTML = '';
+      }, 2000);
+    } catch (error: any) {
+      feedbackStatus.innerHTML = `<p style="color: #ff6b6b;">Error: ${error.message}</p>`;
+    }
   });
 }

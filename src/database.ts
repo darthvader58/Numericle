@@ -1,6 +1,6 @@
-import { doc, setDoc, getDoc, collection, query, orderBy, limit, getDocs, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, getDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
-import type { UserStats, LeaderboardEntry, GameState } from './types';
+import type { UserStats, GameState } from './types';
 
 export async function createUser(userId: string, username: string, email: string): Promise<void> {
   if (!db) return;
@@ -79,60 +79,6 @@ export async function updateStatsAfterGame(userId: string, gameState: GameState)
   
   stats.lastPlayedDate = new Date().toISOString().split('T')[0];
   await saveUserStats(userId, stats);
-  await updateLeaderboardEntry(userId, stats);
-}
-
-async function updateLeaderboardEntry(userId: string, stats: UserStats): Promise<void> {
-  if (!db) return;
-  
-  const userDoc = await getDoc(doc(db, 'users', userId));
-  if (!userDoc.exists()) return;
-  
-  const userData = userDoc.data();
-  const avgGuesses = stats.gamesWon > 0 
-    ? Object.entries(stats.guessDistribution).reduce((sum, [guesses, count]) => 
-        sum + (parseInt(guesses) * count), 0) / stats.gamesWon
-    : 0;
-  
-  const leaderboardData = {
-    username: userData.username || userId,
-    gamesWon: stats.gamesWon,
-    gamesPlayed: stats.gamesPlayed,
-    currentStreak: stats.currentStreak,
-    maxStreak: stats.maxStreak,
-    averageGuesses: Math.round(avgGuesses * 10) / 10,
-    lastPlayedDate: stats.lastPlayedDate,
-    updatedAt: serverTimestamp()
-  };
-  
-  await setDoc(doc(db, 'leaderboard', userId), leaderboardData);
-}
-
-export async function getLeaderboard(limitCount: number = 10): Promise<LeaderboardEntry[]> {
-  if (!db) return [];
-  try {
-    const q = query(
-      collection(db, 'leaderboard'), 
-      orderBy('gamesWon', 'desc'),
-      orderBy('averageGuesses', 'asc'),
-      limit(limitCount)
-    );
-    const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => {
-      const data = doc.data();
-      return {
-        username: data.username,
-        gamesWon: data.gamesWon,
-        currentStreak: data.currentStreak,
-        averageGuesses: data.averageGuesses,
-        lastUpdated: data.lastPlayedDate
-      };
-    });
-  } catch (error) {
-    console.error('Failed to fetch leaderboard:', error);
-    return [];
-  }
 }
 
 export async function saveGameState(userId: string, gameState: GameState): Promise<void> {
@@ -157,4 +103,20 @@ export async function loadGameState(userId: string): Promise<GameState | null> {
   }
   
   return null;
+}
+
+export async function submitFeedback(name: string, email: string, type: string, message: string): Promise<void> {
+  if (!db) return;
+  
+  const feedbackData = {
+    name: name || 'Anonymous',
+    email: email || 'Not provided',
+    type,
+    message,
+    timestamp: serverTimestamp(),
+    userAgent: navigator.userAgent,
+    url: window.location.href
+  };
+  
+  await addDoc(collection(db, 'feedback'), feedbackData);
 }
