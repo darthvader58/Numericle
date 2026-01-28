@@ -1,41 +1,23 @@
 import { signInWithEmail, signInWithGoogle, signUpWithEmail } from './auth';
 import { getLandingFooterHTML } from './components/footer';
+import { getLandingHeaderHTML } from './components/landingHeader';
+import { getLandingActionsHTML } from './components/landingActions';
+import { getLandingInfoHTML } from './components/landingInfo';
 import { icons } from './components/icons';
 
 export function showLandingPage(onStart: () => void): void {
   const app = document.querySelector<HTMLDivElement>('#app')!;
   
-  // Remove app constraints for landing page
-  app.style.maxWidth = 'none';
-  app.style.padding = '0';
+  // Apply landing page specific styles to app container
+  app.className = 'landing-app-container';
   
   app.innerHTML = `
-    <div class="landing-page">
-      <div class="landing-content">
-        <div class="landing-header">
-          <span class="landing-logo">ℕ</span>
-          <h1 class="landing-title">Numericle</h1>
-          <p class="landing-subtitle">Discover the hidden sequence rule</p>
-        </div>
-        
-        <div class="landing-actions">
-          <button id="play-guest" class="primary-btn">Play as Guest</button>
-          <button id="show-signin" class="secondary-btn">Sign In</button>
-          <button id="show-signup" class="secondary-btn">Create Account</button>
-        </div>
-        
-        <div class="landing-info">
-          <div class="info-item">
-            ${icons.question}
-            <p>Guess the 7-number sequence in 10 guesses</p>
-          </div>
-          <div class="info-item">
-            ${icons.pen}
-            <p>Discover mathematical patterns and rules</p>
-          </div>
-        </div>
+    <div class="landing-wrapper">
+      <div class="landing-content-wrapper">
+        ${getLandingHeaderHTML()}
+        ${getLandingActionsHTML()}
+        ${getLandingInfoHTML()}
       </div>
-      
       ${getLandingFooterHTML()}
     </div>
     
@@ -48,9 +30,8 @@ export function showLandingPage(onStart: () => void): void {
   `;
   
   document.getElementById('play-guest')!.addEventListener('click', () => {
-    // Reset app styles when leaving landing page
-    app.style.maxWidth = '';
-    app.style.padding = '';
+    // Reset app class when leaving landing page
+    app.className = '';
     onStart();
   });
   
@@ -102,9 +83,8 @@ function showSignInModal(onStart: () => void, app: HTMLDivElement): void {
     try {
       await signInWithEmail(email, password);
       modal.classList.remove('active');
-      // Reset app styles when leaving landing page
-      app.style.maxWidth = '';
-      app.style.padding = '';
+      // Reset app class when leaving landing page
+      app.className = '';
       onStart();
     } catch (error: any) {
       alert(error.message);
@@ -115,9 +95,8 @@ function showSignInModal(onStart: () => void, app: HTMLDivElement): void {
     try {
       await signInWithGoogle();
       modal.classList.remove('active');
-      // Reset app styles when leaving landing page
-      app.style.maxWidth = '';
-      app.style.padding = '';
+      // Reset app class when leaving landing page
+      app.className = '';
       onStart();
     } catch (error: any) {
       alert(error.message);
@@ -171,9 +150,8 @@ function showSignUpModal(onStart: () => void, app: HTMLDivElement): void {
     try {
       await signUpWithEmail(email, password, username);
       modal.classList.remove('active');
-      // Reset app styles when leaving landing page
-      app.style.maxWidth = '';
-      app.style.padding = '';
+      // Reset app class when leaving landing page
+      app.className = '';
       onStart();
     } catch (error: any) {
       alert(error.message);
@@ -184,9 +162,8 @@ function showSignUpModal(onStart: () => void, app: HTMLDivElement): void {
     try {
       await signInWithGoogle();
       modal.classList.remove('active');
-      // Reset app styles when leaving landing page
-      app.style.maxWidth = '';
-      app.style.padding = '';
+      // Reset app class when leaving landing page
+      app.className = '';
       onStart();
     } catch (error: any) {
       alert(error.message);
