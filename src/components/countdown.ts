@@ -12,6 +12,8 @@ export function startCountdown(): void {
   if (!timerElement) return;
 
   function updateCountdown() {
+    if (!timerElement) return;
+    
     const now = new Date();
     const tomorrow = new Date(Date.UTC(
       now.getUTCFullYear(),

@@ -1,5 +1,4 @@
 import { signInWithEmail, signInWithGoogle, signUpWithEmail } from './auth';
-import { getLandingFooterHTML } from './components/footer';
 import { getLandingHeaderHTML } from './components/landingHeader';
 import { getLandingActionsHTML } from './components/landingActions';
 import { getLandingInfoHTML } from './components/landingInfo';
@@ -12,13 +11,10 @@ export function showLandingPage(onStart: () => void): void {
   app.className = 'landing-app-container';
   
   app.innerHTML = `
-    <div class="landing-wrapper">
-      <div class="landing-content-wrapper">
-        ${getLandingHeaderHTML()}
-        ${getLandingActionsHTML()}
-        ${getLandingInfoHTML()}
-      </div>
-      ${getLandingFooterHTML()}
+    <div class="landing-content-wrapper">
+      ${getLandingHeaderHTML()}
+      ${getLandingActionsHTML()}
+      ${getLandingInfoHTML()}
     </div>
     
     <div id="auth-modal" class="modal">

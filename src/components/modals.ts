@@ -26,7 +26,7 @@ export function getHelpModalHTML(): string {
         <p><strong style="color: #C9B458;">Yellow:</strong> <strong>9</strong> is in the sequence but in the wrong position.</p>
         
         <div class="example-row">
-          ${[3, 7, 11, 15, 19, 23, 27].map((n, i) => 
+          ${[3, 7, 11, 15, 19, 23, 27].map((n) => 
             `<div class="example-cell">${n}</div>`
           ).join('')}
         </div>
