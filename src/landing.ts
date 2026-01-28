@@ -5,6 +5,10 @@ import { icons } from './components/icons';
 export function showLandingPage(onStart: () => void): void {
   const app = document.querySelector<HTMLDivElement>('#app')!;
   
+  // Remove app constraints for landing page
+  app.style.maxWidth = 'none';
+  app.style.padding = '0';
+  
   app.innerHTML = `
     <div class="landing-page">
       <div class="landing-content">
@@ -44,19 +48,22 @@ export function showLandingPage(onStart: () => void): void {
   `;
   
   document.getElementById('play-guest')!.addEventListener('click', () => {
+    // Reset app styles when leaving landing page
+    app.style.maxWidth = '';
+    app.style.padding = '';
     onStart();
   });
   
   document.getElementById('show-signin')!.addEventListener('click', () => {
-    showSignInModal(onStart);
+    showSignInModal(onStart, app);
   });
   
   document.getElementById('show-signup')!.addEventListener('click', () => {
-    showSignUpModal(onStart);
+    showSignUpModal(onStart, app);
   });
 }
 
-function showSignInModal(onStart: () => void): void {
+function showSignInModal(onStart: () => void, app: HTMLDivElement): void {
   const authContent = document.querySelector<HTMLDivElement>('#auth-content')!;
   const modal = document.getElementById('auth-modal')!;
   
@@ -95,6 +102,9 @@ function showSignInModal(onStart: () => void): void {
     try {
       await signInWithEmail(email, password);
       modal.classList.remove('active');
+      // Reset app styles when leaving landing page
+      app.style.maxWidth = '';
+      app.style.padding = '';
       onStart();
     } catch (error: any) {
       alert(error.message);
@@ -105,6 +115,9 @@ function showSignInModal(onStart: () => void): void {
     try {
       await signInWithGoogle();
       modal.classList.remove('active');
+      // Reset app styles when leaving landing page
+      app.style.maxWidth = '';
+      app.style.padding = '';
       onStart();
     } catch (error: any) {
       alert(error.message);
@@ -113,11 +126,11 @@ function showSignInModal(onStart: () => void): void {
   
   document.getElementById('switch-signup')!.addEventListener('click', (e) => {
     e.preventDefault();
-    showSignUpModal(onStart);
+    showSignUpModal(onStart, app);
   });
 }
 
-function showSignUpModal(onStart: () => void): void {
+function showSignUpModal(onStart: () => void, app: HTMLDivElement): void {
   const authContent = document.querySelector<HTMLDivElement>('#auth-content')!;
   const modal = document.getElementById('auth-modal')!;
   
@@ -158,6 +171,9 @@ function showSignUpModal(onStart: () => void): void {
     try {
       await signUpWithEmail(email, password, username);
       modal.classList.remove('active');
+      // Reset app styles when leaving landing page
+      app.style.maxWidth = '';
+      app.style.padding = '';
       onStart();
     } catch (error: any) {
       alert(error.message);
@@ -168,6 +184,9 @@ function showSignUpModal(onStart: () => void): void {
     try {
       await signInWithGoogle();
       modal.classList.remove('active');
+      // Reset app styles when leaving landing page
+      app.style.maxWidth = '';
+      app.style.padding = '';
       onStart();
     } catch (error: any) {
       alert(error.message);
@@ -176,6 +195,6 @@ function showSignUpModal(onStart: () => void): void {
   
   document.getElementById('switch-signin')!.addEventListener('click', (e) => {
     e.preventDefault();
-    showSignInModal(onStart);
+    showSignInModal(onStart, app);
   });
 }
