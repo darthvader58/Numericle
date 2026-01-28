@@ -429,6 +429,18 @@ button:disabled {
   color: var(--key-bg);
 }
 
+.auth-divider a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.auth-divider a:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
 .google-btn {
   background: white;
   color: #1F2937;
