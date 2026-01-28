@@ -11,6 +11,7 @@ import { getHeaderHTML } from './components/header';
 import { getGameBoardHTML } from './components/gameBoard';
 import { getFooterHTML } from './components/footer';
 import { getHelpModalHTML, getAuthModalHTML, getStatsModalHTML, getSignInFormHTML, getSignUpFormHTML } from './components/modals';
+import { getCountdownHTML, startCountdown } from './components/countdown';
 import { icons } from './components/icons';
 import type { GameState } from './types';
 
@@ -469,6 +470,7 @@ async function endGame() {
           <strong>Rule:</strong> ${ruleDescription}
         </div>
       </div>
+      ${getCountdownHTML()}
     `;
   } else {
     message.innerHTML = `
@@ -483,8 +485,12 @@ async function endGame() {
           <strong>Rule:</strong> ${ruleDescription}
         </div>
       </div>
+      ${getCountdownHTML()}
     `;
   }
+  
+  // Start the countdown timer
+  startCountdown();
   
   // Update Firebase stats if user is logged in
   if (currentUser) {

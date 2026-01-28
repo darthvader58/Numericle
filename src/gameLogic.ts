@@ -23,12 +23,13 @@ export function isWinningGuess(results: GuessResult[]): boolean {
 export function generateShareText(attempts: GuessResult[][], puzzleId: string, won: boolean): string {
   const emoji = attempts.map(attempt => 
     attempt.map(result => {
-      if (result === 'correct') return '■';
-      if (result === 'present') return '□';
-      return '·';
+      if (result === 'correct') return '🟩';
+      if (result === 'present') return '🟨';
+      return '⬜';
     }).join('')
   ).join('\n');
   
   const status = won ? `${attempts.length}/10` : 'X/10';
-  return `Numericle ${puzzleId}\n${status}\n\n${emoji}`;
+  const result = won ? 'You won! 🎉' : 'You lost 😔';
+  return `Numericle ${puzzleId}\n${result}\n${status}\n\n${emoji}`;
 }
