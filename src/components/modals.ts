@@ -39,6 +39,7 @@ export function getHelpModalHTML(): string {
         <p>• Same number could occur more than once in the sequence. 
         <p>• Use hints (5 per game) to reveal a number in its correct position</p>
         <p>• New puzzle comes daily at midnight GMT</p>
+        <p>• Blue squares in the results show the hints you used. 
         <p>• Sign in to track stats and maintain your streak!</p>
       </div>
     </div>
