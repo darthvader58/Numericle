@@ -124,9 +124,12 @@ function setupEventListeners() {
     // Handle keyboard navigation
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent form submission
         if (index < inputs.length - 1) {
+          // Move to next input
           inputs[index + 1].focus();
         } else {
+          // On last input, submit the guess
           handleSubmit();
         }
       } else if (e.key === 'Backspace' && input.value === '' && index > 0) {
@@ -314,8 +317,20 @@ function closeModal(modalId: string) {
 function handleHint() {
   if (gameState.isComplete || gameState.hintsUsed >= MAX_HINTS) return;
   
+  // Get positions that are already correctly guessed
+  const correctlyGuessedIndices: number[] = [];
+  if (gameState.results.length > 0) {
+    const lastResults = gameState.results[gameState.results.length - 1];
+    lastResults.forEach((result, index) => {
+      if (result === 'correct') {
+        correctlyGuessedIndices.push(index);
+      }
+    });
+  }
+  
+  // Filter out positions that are already revealed by hints OR already correctly guessed
   const availableIndices = Array.from({ length: 7 }, (_, i) => i)
-    .filter(i => !gameState.revealedIndices.includes(i));
+    .filter(i => !gameState.revealedIndices.includes(i) && !correctlyGuessedIndices.includes(i));
   
   if (availableIndices.length === 0) return;
   

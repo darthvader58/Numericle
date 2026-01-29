@@ -21,10 +21,21 @@ export function isWinningGuess(results: GuessResult[]): boolean {
 }
 
 export function generateShareText(attempts: GuessResult[][], puzzleId: string, won: boolean, hintsUsed: number = 0, revealedIndices: number[] = []): string {
+  // Track which positions were correctly guessed in each attempt
+  const correctPositions = new Set<number>();
+  
   const emoji = attempts.map(attempt => 
     attempt.map((result, index) => {
-      // If this position was revealed by a hint, show blue
-      if (revealedIndices.includes(index)) return '🟦';
+      // If this position was revealed by a hint AND not already correctly guessed, show blue
+      if (revealedIndices.includes(index) && !correctPositions.has(index)) {
+        return '🟦';
+      }
+      
+      // Mark this position as correctly guessed for future rows
+      if (result === 'correct') {
+        correctPositions.add(index);
+      }
+      
       if (result === 'correct') return '🟩';
       if (result === 'present') return '🟨';
       return '⬜';
@@ -34,5 +45,6 @@ export function generateShareText(attempts: GuessResult[][], puzzleId: string, w
   const status = won ? `${attempts.length}/10` : 'X/10';
   const result = won ? 'You won! :)' : 'You lost :(';
   const hintsLine = hintsUsed > 0 ? ` (${hintsUsed} hint${hintsUsed > 1 ? 's' : ''})` : '';
-  return `Numericle ${puzzleId}\n${result}\n${status}${hintsLine}\n\n${emoji}`;
+  const advertise = 'Try out https://numericle.space now!'
+  return `Numericle ${puzzleId}\n${result}\n${status}${hintsLine}\n\n${emoji}\n\n${advertise}`;
 }
