@@ -1,15 +1,31 @@
 import type { GuessResult } from './types';
 
 export function checkGuess(guess: number[], target: number[]): GuessResult[] {
-  const results: GuessResult[] = [];
+  const results: GuessResult[] = new Array(guess.length).fill('absent');
+  const targetCounts = new Map<number, number>();
   
+  // Count occurrences of each number in target
+  target.forEach(num => {
+    targetCounts.set(num, (targetCounts.get(num) || 0) + 1);
+  });
+  
+  // First pass: mark all correct positions (green)
   for (let i = 0; i < guess.length; i++) {
     if (guess[i] === target[i]) {
-      results.push('correct');
-    } else if (target.includes(guess[i])) {
-      results.push('present');
-    } else {
-      results.push('absent');
+      results[i] = 'correct';
+      // Decrease the count for this number
+      targetCounts.set(guess[i], targetCounts.get(guess[i])! - 1);
+    }
+  }
+  
+  // Second pass: mark present positions (yellow) only if count allows
+  for (let i = 0; i < guess.length; i++) {
+    if (results[i] === 'absent' && targetCounts.has(guess[i])) {
+      const count = targetCounts.get(guess[i])!;
+      if (count > 0) {
+        results[i] = 'present';
+        targetCounts.set(guess[i], count - 1);
+      }
     }
   }
   

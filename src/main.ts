@@ -384,12 +384,6 @@ function handleSubmit() {
       return;
     }
     
-    // Validate it's a valid number (no upper limit now)
-    if (value < 0) {
-      showMessage('Numbers must be positive', 'error');
-      return;
-    }
-    
     guess.push(value);
   }
 
