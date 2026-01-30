@@ -140,17 +140,29 @@ function setupEventListeners() {
     
     // Handle input changes
     input.addEventListener('input', () => {
-      let value = input.value.replace(/\D/g, ''); // Remove non-digits
+      // Allow digits and minus sign (only at the start)
+      let value = input.value.replace(/[^\d-]/g, ''); // Remove everything except digits and minus
       
-      // Limit to MAX_DIGITS
-      if (value.length > MAX_DIGITS) {
-        value = value.slice(0, MAX_DIGITS);
+      // Ensure minus sign is only at the beginning
+      if (value.includes('-')) {
+        const minusCount = (value.match(/-/g) || []).length;
+        if (minusCount > 1 || value.indexOf('-') !== 0) {
+          // Remove all minus signs and add one at the start if there was any
+          value = '-' + value.replace(/-/g, '');
+        }
+      }
+      
+      // Limit to MAX_DIGITS (plus 1 for potential minus sign)
+      const maxLength = value.startsWith('-') ? MAX_DIGITS + 1 : MAX_DIGITS;
+      if (value.length > maxLength) {
+        value = value.slice(0, maxLength);
       }
       
       input.value = value;
       
-      // Auto-advance to next input when MAX_DIGITS are entered
-      if (value.length === MAX_DIGITS && index < inputs.length - 1) {
+      // Auto-advance to next input when MAX_DIGITS are entered (accounting for minus sign)
+      const digitCount = value.replace('-', '').length;
+      if (digitCount === MAX_DIGITS && index < inputs.length - 1) {
         inputs[index + 1].focus();
       }
     });
