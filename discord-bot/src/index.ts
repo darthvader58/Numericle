@@ -8,7 +8,10 @@ import { getDailyPuzzleId, getRuleDescription } from './puzzleGenerator';
 dotenv.config();
 
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds]
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.DirectMessages
+  ]
 });
 
 const MAX_ATTEMPTS = 10;
@@ -19,9 +22,15 @@ client.once('ready', () => {
 });
 
 client.on('interactionCreate', async interaction => {
-  if (!interaction.isChatInputCommand()) return;
+  console.log('📥 Interaction received:', interaction.type);
+  
+  if (!interaction.isChatInputCommand()) {
+    console.log('⚠️ Not a chat input command, ignoring');
+    return;
+  }
 
   const { commandName, user, channelId } = interaction;
+  console.log(`🎮 Command: /${commandName} from ${user.tag} in channel ${channelId}`);
 
   try {
     switch (commandName) {
@@ -331,11 +340,22 @@ async function registerCommands() {
   
   try {
     console.log('🔄 Registering slash commands...');
+    
+    // Register to specific guild for instant testing
+    const GUILD_ID = '1468428412275265568';
+    await rest.put(
+      Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID!, GUILD_ID),
+      { body: commands }
+    );
+    console.log('✅ Guild slash commands registered successfully! (instant)');
+    
+    // Also register globally (takes up to 1 hour, but works everywhere)
     await rest.put(
       Routes.applicationCommands(process.env.DISCORD_CLIENT_ID!),
       { body: commands }
     );
-    console.log('✅ Slash commands registered successfully!');
+    console.log('✅ Global slash commands registered successfully! (may take up to 1 hour)');
+    
   } catch (error) {
     console.error('❌ Error registering commands:', error);
   }

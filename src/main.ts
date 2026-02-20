@@ -527,31 +527,5 @@ function handleShare() {
 }
 
 function showFeedbackModal() {
-  openModal('feedback-modal');
-  
-  const feedbackForm = document.getElementById('feedback-form') as HTMLFormElement;
-  const feedbackStatus = document.getElementById('feedback-status')!;
-  
-  feedbackForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const name = (document.getElementById('feedback-name') as HTMLInputElement).value;
-    const email = (document.getElementById('feedback-email') as HTMLInputElement).value;
-    const type = (document.getElementById('feedback-type') as HTMLSelectElement).value;
-    const message = (document.getElementById('feedback-message') as HTMLTextAreaElement).value;
-    
-    try {
-      feedbackStatus.innerHTML = '<p style="color: var(--accent);">Submitting...</p>';
-      await submitFeedback(name, email, type, message);
-      feedbackStatus.innerHTML = '<p style="color: var(--correct);">Thank you! Your feedback has been submitted.</p>';
-      feedbackForm.reset();
-      
-      setTimeout(() => {
-        closeModal('feedback-modal');
-        feedbackStatus.innerHTML = '';
-      }, 2000);
-    } catch (error: any) {
-      feedbackStatus.innerHTML = `<p style="color: #ff6b6b;">Error: ${error.message}</p>`;
-    }
-  });
+  window.open('https://numericle.space/feedback', '_blank', 'noopener,noreferrer');
 }
