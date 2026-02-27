@@ -1,7 +1,7 @@
 {
   "build": {
     "builder": "DOCKERFILE",
-    "dockerfilePath": "Dockerfile"
+    "dockerfilePath": "discord-bot/Dockerfile"
   },
   "deploy": {
     "startCommand": "npm start",

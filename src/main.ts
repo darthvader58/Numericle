@@ -3,7 +3,7 @@ import { getDailyPuzzleId, generateDailyPuzzle, getRuleDescription, getMaxDigits
 import { checkGuess, isWinningGuess, generateShareText } from './gameLogic';
 import { saveGameState, loadGameState, hasPlayedToday } from './storage';
 import { signUpWithEmail, signInWithEmail, signInWithGoogle, signOut, getCurrentUser } from './auth';
-import { getUserStats, updateStatsAfterGame, submitFeedback } from './database';
+import { getUserStats, updateStatsAfterGame } from './database';
 import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { showLandingPage } from './landing';
@@ -72,10 +72,13 @@ function initGame(showHelpOnStart: boolean = false) {
   
   // Show help modal if coming from "Play as Guest"
   if (showHelpOnStart) {
-    // Use setTimeout to ensure DOM is ready
+    // Delay slightly to ensure all DOM elements and event listeners are ready
     setTimeout(() => {
-      openModal('help-modal');
-    }, 100);
+      const helpModal = document.getElementById('help-modal');
+      if (helpModal) {
+        helpModal.classList.add('active');
+      }
+    }, 200);
   }
 }
 

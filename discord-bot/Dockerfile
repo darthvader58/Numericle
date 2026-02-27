@@ -4,15 +4,15 @@ FROM node:20-alpine
 # Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy package files from discord-bot directory
+COPY discord-bot/package*.json ./
 
 # Install dependencies
 RUN npm ci --only=production
 
 # Copy TypeScript config and source code
-COPY tsconfig.json ./
-COPY src ./src
+COPY discord-bot/tsconfig.json ./
+COPY discord-bot/src ./src
 
 # Build TypeScript
 RUN npm install typescript @types/node --save-dev && npm run build
