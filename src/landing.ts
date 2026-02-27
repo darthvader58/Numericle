@@ -4,7 +4,7 @@ import { getLandingActionsHTML } from './components/landingActions';
 import { getLandingInfoHTML } from './components/landingInfo';
 import { icons } from './components/icons';
 
-export function showLandingPage(onStart: () => void): void {
+export function showLandingPage(onStart: (showHelp?: boolean) => void): void {
   const app = document.querySelector<HTMLDivElement>('#app')!;
   
   // Apply landing page specific styles to app container
@@ -28,7 +28,7 @@ export function showLandingPage(onStart: () => void): void {
   document.getElementById('play-guest')!.addEventListener('click', () => {
     // Reset app class when leaving landing page
     app.className = '';
-    onStart();
+    onStart(true); // Pass true to show help modal
   });
   
   document.getElementById('show-signin')!.addEventListener('click', () => {
@@ -40,7 +40,7 @@ export function showLandingPage(onStart: () => void): void {
   });
 }
 
-function showSignInModal(onStart: () => void, app: HTMLDivElement): void {
+function showSignInModal(onStart: (showHelp?: boolean) => void, app: HTMLDivElement): void {
   const authContent = document.querySelector<HTMLDivElement>('#auth-content')!;
   const modal = document.getElementById('auth-modal')!;
   
@@ -105,7 +105,7 @@ function showSignInModal(onStart: () => void, app: HTMLDivElement): void {
   });
 }
 
-function showSignUpModal(onStart: () => void, app: HTMLDivElement): void {
+function showSignUpModal(onStart: (showHelp?: boolean) => void, app: HTMLDivElement): void {
   const authContent = document.querySelector<HTMLDivElement>('#auth-content')!;
   const modal = document.getElementById('auth-modal')!;
   

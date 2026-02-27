@@ -3,8 +3,13 @@ import type { DailyPuzzle } from './types';
 
 const SEQUENCE_LENGTH = 7;
 const MAX_LARGE_NUMBERS = 4;
+const MAX_DIGITS = 4;
 
 function isSequencePlayable(sequence: number[]): boolean {
+  // Check if any number has more than MAX_DIGITS digits
+  const hasOversizedNumber = sequence.some(num => Math.abs(num).toString().length > MAX_DIGITS);
+  if (hasOversizedNumber) return false;
+  
   const largeNumberCount = sequence.filter(num => Math.abs(num) >= 10).length;
   return largeNumberCount <= MAX_LARGE_NUMBERS;
 }
@@ -37,7 +42,7 @@ export function getMaxDigitsForAllSequences(): number {
     } catch (e) {}
   });
   
-  return Math.min(maxDigits, 6);
+  return Math.min(maxDigits, MAX_DIGITS);
 }
 
 export function getDailyPuzzleId(): string {

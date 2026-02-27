@@ -151,12 +151,17 @@ main {
   flex-direction: column;
   gap: 5px;
   margin-bottom: 20px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .guess-row {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 5px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .cell {
@@ -165,10 +170,15 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(16px, 4vw, 28px);
+  font-size: clamp(14px, 3.5vw, 24px);
   font-weight: bold;
   transition: all 0.3s ease;
   border-radius: 2px;
+  overflow: hidden;
+  word-break: break-all;
+  min-width: 0;
+  padding: 2px;
+  line-height: 1;
 }
 
 .cell.revealed {
@@ -543,7 +553,8 @@ button:disabled {
   }
   
   .cell {
-    font-size: 20px;
+    font-size: clamp(12px, 3vw, 18px);
+    padding: 1px;
   }
   
   .sequence-input {
@@ -566,7 +577,8 @@ button:disabled {
   }
   
   .cell {
-    font-size: 18px;
+    font-size: clamp(10px, 2.5vw, 16px);
+    padding: 1px;
   }
   
   .sequence-input {

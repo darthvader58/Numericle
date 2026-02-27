@@ -28,15 +28,15 @@ const hasStarted = hasPlayedToday(puzzleId);
 
 if (!hasStarted) {
   // Show landing page
-  showLandingPage(() => {
-    initGame();
+  showLandingPage((showHelp) => {
+    initGame(showHelp);
   });
 } else {
   // Go directly to game
   initGame();
 }
 
-function initGame() {
+function initGame(showHelpOnStart: boolean = false) {
   const app = document.querySelector<HTMLDivElement>('#app')!;
   
   app.innerHTML = `
@@ -69,6 +69,14 @@ function initGame() {
 
   setupEventListeners();
   setupAuthListener();
+  
+  // Show help modal if coming from "Play as Guest"
+  if (showHelpOnStart) {
+    // Use setTimeout to ensure DOM is ready
+    setTimeout(() => {
+      openModal('help-modal');
+    }, 100);
+  }
 }
 
 function getModalsHTML(): string {
