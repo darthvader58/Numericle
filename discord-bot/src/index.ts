@@ -30,7 +30,7 @@ client.on('interactionCreate', async interaction => {
   }
 
   const { commandName, user, channelId } = interaction;
-  console.log(`🎮 Command: /${commandName} from ${user.tag} in channel ${channelId}`);
+  console.log(`🧮 Command: /${commandName} from ${user.tag} in channel ${channelId}`);
 
   try {
     switch (commandName) {
@@ -75,7 +75,7 @@ async function handleStart(interaction: any) {
   
   const embed = new EmbedBuilder()
     .setColor(0x6AAA64)
-    .setTitle('🎮 Numericle - Daily Sequence Puzzle')
+    .setTitle('🧮 Numericle - Daily Sequence Puzzle')
     .setDescription(`Welcome to today's puzzle: **${game.dailyPuzzleId.split('_')[0]}**\n\nGuess the 7-number sequence!`)
     .addFields(
       { name: '📊 Attempts', value: `0/${MAX_ATTEMPTS}`, inline: true },
@@ -251,7 +251,7 @@ async function handleStatus(interaction: any) {
     .addFields(
       { name: '📊 Attempts', value: `${game.results.length}/${MAX_ATTEMPTS}`, inline: true },
       { name: '💡 Hints Used', value: `${game.hintsUsed}/${MAX_HINTS}`, inline: true },
-      { name: '🎮 Status', value: game.isComplete ? (game.isWon ? '✅ Won' : '❌ Lost') : '🎯 In Progress', inline: true }
+      { name: '🧮 Status', value: game.isComplete ? (game.isWon ? '✅ Won' : '❌ Lost') : '🎯 In Progress', inline: true }
     );
 
   if (game.revealedIndices.length > 0) {
@@ -329,7 +329,7 @@ async function handleRules(interaction: any) {
       { name: '📊 Commands', value: '`/numericle` - Start new game\n`/guess` - Make a guess\n`/hint` - Use a hint\n`/status` - Check progress\n`/give-up` - See solution' },
       { name: '🌍 Daily Puzzle', value: 'Everyone gets the same puzzle each day (resets at midnight GMT)' }
     )
-    .setFooter({ text: 'Good luck! 🍀' });
+    .setFooter({ text: 'Good luck!' });
 
   await interaction.reply({ embeds: [embed], ephemeral: true });
 }
