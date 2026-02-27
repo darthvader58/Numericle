@@ -2,6 +2,22 @@
 
 A Discord bot for playing Numericle - the daily sequence puzzle game!
 
+## 🚀 Deploy to Railway (Recommended)
+
+The easiest way to host your bot 24/7:
+
+1. **Fork this repository** (if you haven't already)
+2. **Go to [Railway.app](https://railway.app)** and sign up
+3. **Click "New Project"** → "Deploy from GitHub repo"
+4. **Select your forked repository** and choose the `discord-bot` folder
+5. **Add Environment Variables**:
+   - Click on your service → Variables tab
+   - Add `DISCORD_TOKEN` with your bot token
+   - Add `DISCORD_CLIENT_ID` with your client ID
+6. **Deploy!** Railway will automatically build and run your bot
+
+Your bot will now run 24/7 with automatic restarts and deployments on every push!
+
 ## Features
 
 - 🎮 Daily sequence puzzles synchronized globally
@@ -67,6 +83,21 @@ Production mode:
 npm run build
 npm start
 ```
+
+## 🌐 Hosting Options
+
+### Railway (Recommended)
+- ✅ Free $5/month credit
+- ✅ Automatic deployments from GitHub
+- ✅ Built-in environment variables
+- ✅ Automatic restarts
+- See deployment instructions above
+
+### Alternative Options
+- **Render.com**: Free tier available
+- **Fly.io**: Good free tier
+- **DigitalOcean**: $4-6/month VPS
+- **AWS EC2**: Free tier for 1 year
 
 ## Commands
 
