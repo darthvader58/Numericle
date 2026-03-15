@@ -5,7 +5,7 @@ import { getDailyPuzzleId, generateDailyPuzzle, getRuleDescription, getRuleLatex
 import { checkGuess, isWinningGuess, generateShareText } from './gameLogic';
 import { saveGameState, loadGameState, hasPlayedToday } from './storage';
 import { signUpWithEmail, signInWithEmail, signInWithGoogle, signOut, getCurrentUser } from './auth';
-import { getUserStats, updateStatsAfterGame } from './database';
+import { getUserStats, submitFeedback, updateStatsAfterGame } from './database';
 import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { showLandingPage } from './landing';
@@ -132,6 +132,11 @@ function setupEventListeners() {
       }
     });
   });
+
+  const feedbackForm = document.getElementById('feedback-form') as HTMLFormElement | null;
+  if (feedbackForm) {
+    feedbackForm.addEventListener('submit', handleFeedbackSubmit);
+  }
   
   inputs.forEach((input, index) => {
     // Handle keyboard navigation
@@ -548,5 +553,53 @@ function handleShare() {
 }
 
 function showFeedbackModal() {
-  window.open('https://numericle.space/feedback', '_blank', 'noopener,noreferrer');
+  openModal('feedback-modal');
+}
+
+async function handleFeedbackSubmit(e: Event) {
+  e.preventDefault();
+
+  const nameInput = document.getElementById('feedback-name') as HTMLInputElement | null;
+  const emailInput = document.getElementById('feedback-email') as HTMLInputElement | null;
+  const typeInput = document.getElementById('feedback-type') as HTMLSelectElement | null;
+  const messageInput = document.getElementById('feedback-message') as HTMLTextAreaElement | null;
+  const statusEl = document.getElementById('feedback-status');
+  const submitBtn = document.querySelector<HTMLButtonElement>('#feedback-form button[type="submit"]');
+
+  if (!typeInput?.value || !messageInput?.value.trim()) {
+    if (statusEl) {
+      statusEl.textContent = 'Please select a feedback type and enter a message.';
+      statusEl.style.color = 'var(--error)';
+    }
+    return;
+  }
+
+  if (submitBtn) submitBtn.disabled = true;
+
+  try {
+    await submitFeedback(
+      nameInput?.value.trim() || '',
+      emailInput?.value.trim() || '',
+      typeInput.value,
+      messageInput.value.trim()
+    );
+
+    if (statusEl) {
+      statusEl.textContent = 'Feedback submitted. Thank you.';
+      statusEl.style.color = 'var(--correct)';
+    }
+
+    nameInput && (nameInput.value = '');
+    emailInput && (emailInput.value = '');
+    typeInput.value = '';
+    messageInput.value = '';
+  } catch (error) {
+    console.error('Failed to submit feedback:', error);
+    if (statusEl) {
+      statusEl.textContent = 'Failed to submit feedback. Please try again.';
+      statusEl.style.color = 'var(--error)';
+    }
+  } finally {
+    if (submitBtn) submitBtn.disabled = false;
+  }
 }
