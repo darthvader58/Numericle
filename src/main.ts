@@ -485,6 +485,16 @@ async function endGame() {
 
   const ruleDescription = getRuleDescription(currentPuzzle.rule);
   const ruleLatex = getRuleLatex(currentPuzzle.rule);
+  let renderedRuleMarkup = '';
+
+  try {
+    renderedRuleMarkup = katex.renderToString(ruleLatex, {
+      throwOnError: false,
+      displayMode: false
+    });
+  } catch {
+    renderedRuleMarkup = ruleLatex;
+  }
 
   const solutionBlock = `
     <div class="solution-info">
@@ -493,7 +503,7 @@ async function endGame() {
       </div>
       <div class="solution-rule">
         <strong>Rule:</strong>
-        <span id="rule-latex-display"></span>
+        <span id="rule-latex-display">${renderedRuleMarkup}</span>
         <div class="rule-description-text">${ruleDescription}</div>
       </div>
     </div>
@@ -513,16 +523,6 @@ async function endGame() {
       ${solutionBlock}
       ${getCountdownHTML()}
     `;
-  }
-
-  // Render LaTeX into the placeholder
-  const el = document.getElementById('rule-latex-display');
-  if (el) {
-    try {
-      katex.render(ruleLatex, el, { throwOnError: false, displayMode: false });
-    } catch {
-      el.textContent = ruleLatex;
-    }
   }
 
   // Start the countdown timer
