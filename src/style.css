@@ -797,17 +797,17 @@ button:disabled {
   margin-bottom: 4px;
 }
 
-.rule-description {
+.rule-description-text {
   font-size: 13px;
   color: var(--accent);
   margin-top: 6px;
   font-style: italic;
 }
 
-/* KaTeX overrides for dark theme */
-.katex {
+/* KaTeX dark theme */
+#rule-latex-display .katex {
   color: var(--present);
-  font-size: 1.1em;
+  font-size: 1.15em;
 }
 
 @media (max-width: 480px) {

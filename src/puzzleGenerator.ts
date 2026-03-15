@@ -1,4 +1,5 @@
 import { sequenceRules } from './enhancedSequenceRules';
+import { descriptionToLatex } from './latexConverter';
 import type { DailyPuzzle } from './types';
 
 const SEQUENCE_LENGTH = 7;
@@ -94,9 +95,10 @@ export function getRuleDescription(ruleName: string): string {
   return rule ? rule.description : 'Unknown rule';
 }
 
-export function getRuleLatex(ruleName: string): string | undefined {
+export function getRuleLatex(ruleName: string): string {
   const rule = playableRules.find(r => r.name === ruleName) || sequenceRules.find(r => r.name === ruleName);
-  return rule?.latex;
+  if (!rule) return 'Unknown rule';
+  return descriptionToLatex(rule.description);
 }
 
 function hashCode(str: string): number {

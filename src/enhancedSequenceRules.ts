@@ -7,25 +7,21 @@ export const sequenceRules: SequenceRule[] = [
     name: 'squares',
     generate: (len) => Array.from({ length: len }, (_, i) => (i + 1) ** 2),
     description: 'Perfect Squares: Each term is n² where n starts from 1',
-    latex: 'a_n = n^2'
   },
   {
     name: 'cubes',
     generate: (len) => Array.from({ length: len }, (_, i) => (i + 1) ** 3),
     description: 'Perfect Cubes: Each term is n³ where n starts from 1',
-    latex: 'a_n = n^3'
   },
   {
     name: 'squares_plus_one',
     generate: (len) => Array.from({ length: len }, (_, i) => (i + 1) ** 2 + 1),
     description: 'Squares Plus One: Each term is n² + 1',
-    latex: 'a_n = n^2 + 1'
   },
   {
     name: 'n_squared_plus_n',
     generate: (len) => Array.from({ length: len }, (_, i) => (i + 1) ** 2 + (i + 1)),
     description: 'Polynomial: n² + n (combines square and linear growth)',
-    latex: 'a_n = n^2 + n'
   },
   
   // === ARITHMETIC SEQUENCES ===
@@ -33,31 +29,26 @@ export const sequenceRules: SequenceRule[] = [
     name: 'arithmetic_3',
     generate: (len) => Array.from({ length: len }, (_, i) => 3 * (i + 1)),
     description: 'Multiples of 3: Each term is 3n (arithmetic sequence with difference 3)',
-    latex: 'a_n = 3n'
   },
   {
     name: 'arithmetic_5_plus_2',
     generate: (len) => Array.from({ length: len }, (_, i) => 5 * i + 2),
     description: 'Arithmetic Sequence: Starts at 2, increases by 5 each time (5n + 2)',
-    latex: 'a_n = 5n + 2'
   },
   {
     name: 'arithmetic_7_minus_3',
     generate: (len) => Array.from({ length: len }, (_, i) => 7 * (i + 1) - 3),
     description: 'Arithmetic: 7n - 3 (multiples of 7, shifted down by 3)',
-    latex: 'a_n = 7n - 3'
   },
   {
     name: 'odd_numbers',
     generate: (len) => Array.from({ length: len }, (_, i) => 2 * i + 1),
     description: 'Odd Numbers: 2n + 1, the sequence of all odd positive integers',
-    latex: 'a_n = 2n + 1'
   },
   {
     name: 'even_numbers',
     generate: (len) => Array.from({ length: len }, (_, i) => 2 * (i + 1)),
     description: 'Even Numbers: 2n, the sequence of all even positive integers',
-    latex: 'a_n = 2n'
   },
   
   // === GEOMETRIC SEQUENCES ===
@@ -65,13 +56,11 @@ export const sequenceRules: SequenceRule[] = [
     name: 'powers_of_2',
     generate: (len) => Array.from({ length: len }, (_, i) => 2 ** (i + 1)),
     description: 'Powers of 2: Each term is 2ⁿ (geometric sequence, doubles each time)',
-    latex: 'a_n = 2^n'
   },
   {
     name: 'powers_of_3',
     generate: (len) => Array.from({ length: len }, (_, i) => 3 ** (i + 1)),
     description: 'Powers of 3: Each term is 3ⁿ (triples each time)',
-    latex: 'a_n = 3^n'
   },
   {
     name: 'double_previous',
@@ -81,7 +70,6 @@ export const sequenceRules: SequenceRule[] = [
       return seq;
     },
     description: 'Doubling Sequence: Each term is double the previous term (starts at 1)',
-    latex: 'a_1 = 1,\\quad a_n = 2\\,a_{n-1}'
   },
   
   // === RECURSIVE/ADDITIVE SEQUENCES ===
@@ -93,7 +81,6 @@ export const sequenceRules: SequenceRule[] = [
       return fib.slice(0, len);
     },
     description: 'Fibonacci Sequence: Each term is the sum of the previous two terms',
-    latex: 'a_1=1,\\; a_2=1,\\; a_n = a_{n-1} + a_{n-2}'
   },
   {
     name: 'tribonacci',
@@ -103,7 +90,6 @@ export const sequenceRules: SequenceRule[] = [
       return trib.slice(0, len);
     },
     description: 'Tribonacci: Each term is the sum of the previous three terms',
-    latex: 'a_n = a_{n-1} + a_{n-2} + a_{n-3}'
   },
   {
     name: 'lucas',
@@ -113,7 +99,6 @@ export const sequenceRules: SequenceRule[] = [
       return lucas.slice(0, len);
     },
     description: 'Lucas Numbers: Like Fibonacci but starts with 2, 1',
-    latex: 'a_1=2,\\; a_2=1,\\; a_n = a_{n-1} + a_{n-2}'
   },
 
   // === FIGURATE NUMBERS ===
@@ -121,19 +106,16 @@ export const sequenceRules: SequenceRule[] = [
     name: 'triangular',
     generate: (len) => Array.from({ length: len }, (_, i) => ((i + 1) * (i + 2)) / 2),
     description: 'Triangular Numbers: n(n+1)/2, representing dots in a triangle',
-    latex: 'a_n = \\dfrac{n(n+1)}{2}'
   },
   {
     name: 'pentagonal',
     generate: (len) => Array.from({ length: len }, (_, i) => ((i + 1) * (3 * (i + 1) - 1)) / 2),
     description: 'Pentagonal Numbers: n(3n-1)/2, representing dots in a pentagon',
-    latex: 'a_n = \\dfrac{n(3n-1)}{2}'
   },
   {
     name: 'hexagonal',
     generate: (len) => Array.from({ length: len }, (_, i) => (i + 1) * (2 * (i + 1) - 1)),
     description: 'Hexagonal Numbers: n(2n-1), representing dots in a hexagon',
-    latex: 'a_n = n(2n-1)'
   },
   
   // === SPECIAL SEQUENCES ===
@@ -144,7 +126,6 @@ export const sequenceRules: SequenceRule[] = [
       return primes.slice(0, len);
     },
     description: 'Prime Numbers: Numbers divisible only by 1 and themselves',
-    latex: 'p_n \\text{ (the } n\\text{-th prime)}'
   },
   {
     name: 'factorial',
@@ -154,7 +135,6 @@ export const sequenceRules: SequenceRule[] = [
       return seq.slice(0, len);
     },
     description: 'Factorial Sequence: Each term is n! (n factorial = 1×2×3×...×n)',
-    latex: 'a_n = n!'
   },
   {
     name: 'catalan',
@@ -163,7 +143,6 @@ export const sequenceRules: SequenceRule[] = [
       return catalan.slice(0, len);
     },
     description: 'Catalan Numbers: Special sequence appearing in combinatorics',
-    latex: 'C_n = \\dfrac{1}{n+1}\\binom{2n}{n}'
   },
   
   // === FAMOUS MATHEMATICAL SEQUENCES ===
@@ -175,7 +154,6 @@ export const sequenceRules: SequenceRule[] = [
       return mersenne.slice(0, len);
     },
     description: 'Mersenne Primes: Primes of the form 2^p - 1',
-    latex: 'M_p = 2^p - 1 \\text{ (prime)}'
   },
   {
     name: 'pascal_row_sums',
@@ -184,7 +162,6 @@ export const sequenceRules: SequenceRule[] = [
       return Array.from({ length: len }, (_, i) => 2 ** i);
     },
     description: "Pascal's Row Sums: Sum of nth row in Pascal's triangle equals 2^n",
-    latex: 'a_n = 2^{n-1}'
   },
   {
     name: 'pascal_diagonal',
@@ -193,7 +170,6 @@ export const sequenceRules: SequenceRule[] = [
       return Array.from({ length: len }, (_, i) => i + 1);
     },
     description: "Pascal's First Diagonal: Natural numbers from Pascal's triangle",
-    latex: 'a_n = n'
   },
   {
     name: 'pascal_triangular',
@@ -202,7 +178,6 @@ export const sequenceRules: SequenceRule[] = [
       return Array.from({ length: len }, (_, i) => ((i + 1) * (i + 2)) / 2);
     },
     description: "Pascal's Triangular Diagonal: Triangular numbers from Pascal's triangle",
-    latex: 'a_n = \\dfrac{n(n+1)}{2}'
   },
   {
     name: 'sylvester_sequence',
@@ -216,7 +191,6 @@ export const sequenceRules: SequenceRule[] = [
       return seq.slice(0, len);
     },
     description: "Sylvester's Sequence: Each term is previous^2 - previous + 1",
-    latex: 'a_1=2,\\quad a_n = a_{n-1}^2 - a_{n-1} + 1'
   },
   {
     name: 'somos_4',
@@ -229,7 +203,6 @@ export const sequenceRules: SequenceRule[] = [
       return seq.slice(0, len);
     },
     description: 'Somos-4 Sequence: Recursive sequence with surprising integer property',
-    latex: 'a_n = \\dfrac{a_{n-1}a_{n-3} + a_{n-2}^2}{a_{n-4}}'
   },
   {
     name: 'perfect_numbers',
@@ -239,7 +212,6 @@ export const sequenceRules: SequenceRule[] = [
       return perfect.slice(0, len);
     },
     description: 'Perfect Numbers: Numbers equal to the sum of their proper divisors',
-    latex: 'n = \\sum_{d \\mid n,\\, d < n} d'
   },
   {
     name: 'lazy_caterer',
@@ -251,7 +223,6 @@ export const sequenceRules: SequenceRule[] = [
       });
     },
     description: "Lazy Caterer's Sequence: Max pieces from n straight cuts of a disk",
-    latex: 'a_n = \\dfrac{n^2 + n + 2}{2}'
   },
   {
     name: 'bell_numbers',
@@ -261,7 +232,6 @@ export const sequenceRules: SequenceRule[] = [
       return bell.slice(0, len);
     },
     description: 'Bell Numbers: Number of ways to partition a set',
-    latex: 'B_n = \\sum_{k=0}^{n-1} \\binom{n-1}{k} B_k'
   },
   {
     name: 'motzkin_numbers',
@@ -271,7 +241,6 @@ export const sequenceRules: SequenceRule[] = [
       return motzkin.slice(0, len);
     },
     description: 'Motzkin Numbers: Paths from (0,0) to (n,0) with specific rules',
-    latex: 'M_n = M_{n-1} + \\sum_{k=0}^{n-2} M_k M_{n-2-k}'
   },
   {
     name: 'pell_numbers',
@@ -284,7 +253,6 @@ export const sequenceRules: SequenceRule[] = [
       return pell.slice(0, len);
     },
     description: 'Pell Numbers: Recursive sequence P(n) = 2P(n-1) + P(n-2)',
-    latex: 'a_n = 2\\,a_{n-1} + a_{n-2}'
   },
   {
     name: 'padovan_sequence',
@@ -297,7 +265,6 @@ export const sequenceRules: SequenceRule[] = [
       return padovan.slice(0, len);
     },
     description: 'Padovan Sequence: P(n) = P(n-2) + P(n-3), related to plastic number',
-    latex: 'a_n = a_{n-2} + a_{n-3}'
   },
   {
     name: 'partition_numbers',
@@ -307,7 +274,6 @@ export const sequenceRules: SequenceRule[] = [
       return partition.slice(0, len);
     },
     description: 'Partition Numbers: Ways to write n as sum of positive integers',
-    latex: 'p(n) = \\text{number of partitions of } n'
   },
   {
     name: 'stern_brocot',
@@ -345,7 +311,6 @@ export const sequenceRules: SequenceRule[] = [
       return seq.slice(0, len);
     },
     description: "Recamán's Sequence: Subtract if possible and not seen, else add",
-    latex: 'a_n = \\begin{cases} a_{n-1} - n & \\text{if } a_{n-1}-n > 0 \\text{ and unseen} \\\\ a_{n-1} + n & \\text{otherwise} \\end{cases}'
   },
   
   // === DIGIT-BASED PATTERNS ===
@@ -360,7 +325,6 @@ export const sequenceRules: SequenceRule[] = [
       return seq;
     },
     description: 'Multiples of 9: All have digit sum of 9 (or multiple of 9)',
-    latex: 'a_n = 9n'
   },
   {
     name: 'palindromic',
@@ -376,13 +340,11 @@ export const sequenceRules: SequenceRule[] = [
     name: 'mod_5',
     generate: (len) => Array.from({ length: len }, (_, i) => (i + 1) % 5),
     description: 'Modulo 5: Remainder when dividing n by 5, creates a repeating cycle',
-    latex: 'a_n = n \\bmod 5'
   },
   {
     name: 'mod_7_offset',
     generate: (len) => Array.from({ length: len }, (_, i) => ((i + 1) % 7) + 1),
     description: 'Modulo 7 (offset): Cycles through 1-7 repeatedly',
-    latex: 'a_n = (n \\bmod 7) + 1'
   },
   
   // === ALTERNATING/SIGN PATTERNS ===
@@ -390,13 +352,11 @@ export const sequenceRules: SequenceRule[] = [
     name: 'alternating_sign',
     generate: (len) => Array.from({ length: len }, (_, i) => (i % 2 === 0 ? i + 1 : -(i + 1))),
     description: 'Alternating Signs: Positive and negative integers alternating',
-    latex: 'a_n = (-1)^{n+1}\\, n'
   },
   {
     name: 'alternating_powers',
     generate: (len) => Array.from({ length: len }, (_, i) => (i % 2 === 0 ? (i + 1) ** 2 : (i + 1) ** 3)),
     description: 'Alternating Powers: Alternates between squares and cubes',
-    latex: 'a_n = \\begin{cases} n^2 & n \\text{ odd} \\\\ n^3 & n \\text{ even} \\end{cases}'
   },
 
   // === HARMONIC/RATIO PATTERNS ===
@@ -414,7 +374,6 @@ export const sequenceRules: SequenceRule[] = [
       return Array.from({ length: len }, (_, i) => sumDivisors(i + 1));
     },
     description: 'Sum of Divisors: Sum of all divisors of n (including n itself)',
-    latex: 'a_n = \\sigma(n) = \\sum_{d \\mid n} d'
   },
   
   // === MIXED/COMPLEX PATTERNS ===
@@ -428,7 +387,6 @@ export const sequenceRules: SequenceRule[] = [
       });
     },
     description: 'Number Plus Reverse: Each term is n + reverse(n) (e.g., 12 + 21 = 33)',
-    latex: 'a_n = n + \\overline{n}'
   },
   {
     name: 'collatz_steps',
@@ -445,7 +403,6 @@ export const sequenceRules: SequenceRule[] = [
       return Array.from({ length: len }, (_, i) => collatzSteps(i + 1));
     },
     description: 'Collatz Steps: Number of steps to reach 1 in the Collatz sequence',
-    latex: 'a_n = \\begin{cases} n/2 & n \\text{ even} \\\\ 3n+1 & n \\text{ odd} \\end{cases}'
   },
   {
     name: 'sum_of_squares',
@@ -457,19 +414,16 @@ export const sequenceRules: SequenceRule[] = [
       });
     },
     description: 'Cumulative Sum of Squares: Running total of 1² + 2² + 3² + ...',
-    latex: 'a_n = \\sum_{k=1}^{n} k^2 = \\dfrac{n(n+1)(2n+1)}{6}'
   },
   {
     name: 'difference_of_squares',
     generate: (len) => Array.from({ length: len }, (_, i) => (i + 2) ** 2 - (i + 1) ** 2),
     description: 'Difference of Consecutive Squares: (n+1)² - n² = 2n + 1',
-    latex: 'a_n = (n+1)^2 - n^2 = 2n+1'
   },
   {
     name: 'powers_alternating',
     generate: (len) => Array.from({ length: len }, (_, i) => (i + 1) ** (i + 1)),
     description: 'Self Powers: Each term is n^n (1¹, 2², 3³, 4⁴, ...)',
-    latex: 'a_n = n^n'
   },
   {
     name: 'digital_root',
@@ -494,7 +448,6 @@ export const sequenceRules: SequenceRule[] = [
       return gaps;
     },
     description: 'Gaps Between Squares: Difference between consecutive perfect squares',
-    latex: 'a_n = (n+1)^2 - n^2 = 2n+1'
   },
 
   // ==================== ADDITIONAL 500+ SEQUENCES ====================

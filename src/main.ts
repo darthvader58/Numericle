@@ -483,71 +483,52 @@ async function endGame() {
 
   const ruleDescription = getRuleDescription(currentPuzzle.rule);
   const ruleLatex = getRuleLatex(currentPuzzle.rule);
-  
-  const ruleHTML = ruleLatex
-    ? `<span id="rule-latex"></span>`
-    : ruleDescription;
+
+  const solutionBlock = `
+    <div class="solution-info">
+      <div class="solution-sequence">
+        <strong>Solution:</strong> ${currentPuzzle.sequence.join(', ')}
+      </div>
+      <div class="solution-rule">
+        <strong>Rule:</strong>
+        <span id="rule-latex-display"></span>
+        <div class="rule-description-text">${ruleDescription}</div>
+      </div>
+    </div>
+  `;
 
   if (gameState.isWon) {
     message.innerHTML = `
       <div class="success">
         You discovered the sequence in ${gameState.results.length} ${gameState.results.length === 1 ? 'guess' : 'guesses'}!
       </div>
-      <div class="solution-info">
-        <div class="solution-sequence">
-          <strong>Solution:</strong> ${currentPuzzle.sequence.join(', ')}
-        </div>
-        <div class="solution-rule">
-          <strong>Rule:</strong> ${ruleHTML}
-          ${ruleLatex ? `<div class="rule-description">${ruleDescription}</div>` : ''}
-        </div>
-      </div>
+      ${solutionBlock}
       ${getCountdownHTML()}
     `;
   } else {
     message.innerHTML = `
-      <div class="info">
-        Better luck next time!
-      </div>
-      <div class="solution-info">
-        <div class="solution-sequence">
-          <strong>Solution:</strong> ${currentPuzzle.sequence.join(', ')}
-        </div>
-        <div class="solution-rule">
-          <strong>Rule:</strong> ${ruleHTML}
-          ${ruleLatex ? `<div class="rule-description">${ruleDescription}</div>` : ''}
-        </div>
-      </div>
+      <div class="info">Better luck next time!</div>
+      ${solutionBlock}
       ${getCountdownHTML()}
     `;
   }
 
-  // Render LaTeX if available
-  if (ruleLatex) {
-    const latexEl = document.getElementById('rule-latex');
-    if (latexEl && (window as any).katex) {
+  // Render LaTeX into the placeholder
+  const renderLatex = () => {
+    const el = document.getElementById('rule-latex-display');
+    if (!el) return;
+    if ((window as any).katex) {
       try {
-        (window as any).katex.render(ruleLatex, latexEl, { throwOnError: false, displayMode: false });
+        (window as any).katex.render(ruleLatex, el, { throwOnError: false, displayMode: false });
       } catch {
-        latexEl.textContent = ruleDescription;
+        el.textContent = ruleLatex;
       }
-    } else if (latexEl) {
-      // KaTeX not loaded yet, wait for it
-      const tryRender = () => {
-        if ((window as any).katex) {
-          try {
-            (window as any).katex.render(ruleLatex, latexEl, { throwOnError: false, displayMode: false });
-          } catch {
-            latexEl.textContent = ruleDescription;
-          }
-        } else {
-          setTimeout(tryRender, 100);
-        }
-      };
-      tryRender();
+    } else {
+      setTimeout(renderLatex, 100);
     }
-  }
-  
+  };
+  renderLatex();
+
   // Start the countdown timer
   startCountdown();
   
