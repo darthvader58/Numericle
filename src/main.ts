@@ -1,7 +1,7 @@
 import './style.css';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
-import { getDailyPuzzleId, generateDailyPuzzle, getRuleDescription, getRuleLatex, getMaxDigitsForAllSequences } from './puzzleGenerator';
+import { getDailyPuzzleId, generateDailyPuzzle, getRuleLatex, getMaxDigitsForAllSequences } from './puzzleGenerator';
 import { checkGuess, isWinningGuess, generateShareText } from './gameLogic';
 import { saveGameState, loadGameState, hasPlayedToday } from './storage';
 import { signUpWithEmail, signInWithEmail, signInWithGoogle, signOut, getCurrentUser } from './auth';
@@ -488,7 +488,6 @@ async function endGame() {
   inputSection.style.display = 'none';
   stats.style.display = 'block';
 
-  const ruleDescription = getRuleDescription(currentPuzzle.rule);
   const ruleLatex = getRuleLatex(currentPuzzle.rule);
   let renderedRuleMarkup = '';
 
@@ -509,7 +508,6 @@ async function endGame() {
       <div class="solution-rule">
         <strong>Rule:</strong>
         <span id="rule-latex-display">${renderedRuleMarkup}</span>
-        <div class="rule-description-text">${ruleDescription}</div>
       </div>
     </div>
   `;
