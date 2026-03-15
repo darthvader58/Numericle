@@ -170,15 +170,17 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(14px, 3.5vw, 24px);
+  font-size: clamp(10px, 3vw, 20px);
   font-weight: bold;
   transition: all 0.3s ease;
   border-radius: 2px;
   overflow: hidden;
   word-break: break-all;
   min-width: 0;
+  max-width: 100%;
   padding: 2px;
   line-height: 1;
+  box-sizing: border-box;
 }
 
 .cell.revealed {
@@ -793,6 +795,19 @@ button:disabled {
   color: var(--text);
   display: block;
   margin-bottom: 4px;
+}
+
+.rule-description {
+  font-size: 13px;
+  color: var(--accent);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* KaTeX overrides for dark theme */
+.katex {
+  color: var(--present);
+  font-size: 1.1em;
 }
 
 @media (max-width: 480px) {

@@ -2,6 +2,7 @@ export type SequenceRule = {
   name: string;
   generate: (length: number) => number[];
   description: string;
+  latex?: string; // optional LaTeX formula string
 };
 
 export type GuessResult = 'correct' | 'present' | 'absent';

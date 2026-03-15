@@ -94,6 +94,11 @@ export function getRuleDescription(ruleName: string): string {
   return rule ? rule.description : 'Unknown rule';
 }
 
+export function getRuleLatex(ruleName: string): string | undefined {
+  const rule = playableRules.find(r => r.name === ruleName) || sequenceRules.find(r => r.name === ruleName);
+  return rule?.latex;
+}
+
 function hashCode(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {

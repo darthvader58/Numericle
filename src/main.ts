@@ -1,5 +1,5 @@
 import './style.css';
-import { getDailyPuzzleId, generateDailyPuzzle, getRuleDescription, getMaxDigitsForAllSequences } from './puzzleGenerator';
+import { getDailyPuzzleId, generateDailyPuzzle, getRuleDescription, getRuleLatex, getMaxDigitsForAllSequences } from './puzzleGenerator';
 import { checkGuess, isWinningGuess, generateShareText } from './gameLogic';
 import { saveGameState, loadGameState, hasPlayedToday } from './storage';
 import { signUpWithEmail, signInWithEmail, signInWithGoogle, signOut, getCurrentUser } from './auth';
@@ -482,7 +482,12 @@ async function endGame() {
   stats.style.display = 'block';
 
   const ruleDescription = getRuleDescription(currentPuzzle.rule);
+  const ruleLatex = getRuleLatex(currentPuzzle.rule);
   
+  const ruleHTML = ruleLatex
+    ? `<span id="rule-latex"></span>`
+    : ruleDescription;
+
   if (gameState.isWon) {
     message.innerHTML = `
       <div class="success">
@@ -493,7 +498,8 @@ async function endGame() {
           <strong>Solution:</strong> ${currentPuzzle.sequence.join(', ')}
         </div>
         <div class="solution-rule">
-          <strong>Rule:</strong> ${ruleDescription}
+          <strong>Rule:</strong> ${ruleHTML}
+          ${ruleLatex ? `<div class="rule-description">${ruleDescription}</div>` : ''}
         </div>
       </div>
       ${getCountdownHTML()}
@@ -508,11 +514,38 @@ async function endGame() {
           <strong>Solution:</strong> ${currentPuzzle.sequence.join(', ')}
         </div>
         <div class="solution-rule">
-          <strong>Rule:</strong> ${ruleDescription}
+          <strong>Rule:</strong> ${ruleHTML}
+          ${ruleLatex ? `<div class="rule-description">${ruleDescription}</div>` : ''}
         </div>
       </div>
       ${getCountdownHTML()}
     `;
+  }
+
+  // Render LaTeX if available
+  if (ruleLatex) {
+    const latexEl = document.getElementById('rule-latex');
+    if (latexEl && (window as any).katex) {
+      try {
+        (window as any).katex.render(ruleLatex, latexEl, { throwOnError: false, displayMode: false });
+      } catch {
+        latexEl.textContent = ruleDescription;
+      }
+    } else if (latexEl) {
+      // KaTeX not loaded yet, wait for it
+      const tryRender = () => {
+        if ((window as any).katex) {
+          try {
+            (window as any).katex.render(ruleLatex, latexEl, { throwOnError: false, displayMode: false });
+          } catch {
+            latexEl.textContent = ruleDescription;
+          }
+        } else {
+          setTimeout(tryRender, 100);
+        }
+      };
+      tryRender();
+    }
   }
   
   // Start the countdown timer
