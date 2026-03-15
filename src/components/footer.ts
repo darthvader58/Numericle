@@ -31,7 +31,7 @@ export function getLandingFooterHTML(): string {
           <span class="footer-separator">•</span>
           <span class="footer-text">Inspired by <a href="https://www.nytimes.com/games/wordle/index.html" target="_blank" rel="noopener noreferrer">New York Times Wordle</a></span>
           <span class="footer-separator">•</span>
-          <span class="footer-text">&copy; ${new Date().getFullYear()} Numericle, All Rights Reserved</span>
+          <span class="footer-text">&copy; ${new Date().getFullYear()} <a href="https://www.github.com/darthvader58/numericle" target="_blank" rel="noopener noreferrer">Numericle</a>, All Rights Reserved</span>
         </div>
       </div>
     </footer>

@@ -1,4 +1,6 @@
 import './style.css';
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
 import { getDailyPuzzleId, generateDailyPuzzle, getRuleDescription, getRuleLatex, getMaxDigitsForAllSequences } from './puzzleGenerator';
 import { checkGuess, isWinningGuess, generateShareText } from './gameLogic';
 import { saveGameState, loadGameState, hasPlayedToday } from './storage';
@@ -514,20 +516,14 @@ async function endGame() {
   }
 
   // Render LaTeX into the placeholder
-  const renderLatex = () => {
-    const el = document.getElementById('rule-latex-display');
-    if (!el) return;
-    if ((window as any).katex) {
-      try {
-        (window as any).katex.render(ruleLatex, el, { throwOnError: false, displayMode: false });
-      } catch {
-        el.textContent = ruleLatex;
-      }
-    } else {
-      setTimeout(renderLatex, 100);
+  const el = document.getElementById('rule-latex-display');
+  if (el) {
+    try {
+      katex.render(ruleLatex, el, { throwOnError: false, displayMode: false });
+    } catch {
+      el.textContent = ruleLatex;
     }
-  };
-  renderLatex();
+  }
 
   // Start the countdown timer
   startCountdown();
