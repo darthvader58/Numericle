@@ -9,7 +9,7 @@ export function descriptionToLatex(description: string): string {
 
   // --- Polynomial / Arithmetic patterns ---
   // e.g. "n² + 3n", "2n² + n", "n³ - 2n", "n⁴ + n²", "5n + 2", "7n - 3"
-  const polyMatch = hint.match(/^([^(,]+)$/);
+  const polyMatch = looksLikeMathExpression(hint) ? hint.match(/^([^(,]+)$/) : null;
   if (polyMatch) {
     const expr = polyMatch[1].trim();
     const latex = exprToLatex(expr);
@@ -145,7 +145,11 @@ export function descriptionToLatex(description: string): string {
 
   // Fallback: try to convert the hint directly
   const fallback = exprToLatex(hint);
-  return fallback ? `a_n = ${fallback}` : hint;
+  if (fallback) {
+    return `a_n = ${fallback}`;
+  }
+
+  return formatProseAsLatex(hint);
 }
 
 /**
@@ -179,4 +183,54 @@ function exprToLatex(expr: string): string | null {
   }
 
   return null;
+}
+
+function looksLikeMathExpression(expr: string): boolean {
+  const normalized = normalizeSuperscripts(expr).trim();
+
+  if (!normalized) {
+    return false;
+  }
+
+  const hasOperator = /[+\-*/^=×⌊⌋]/.test(expr);
+  const hasMathStructure =
+    /\b(a\(n\)|a_n|n|S\(n\)|mod|bmod)\b/i.test(normalized) ||
+    /\d+[a-zA-Z]/.test(normalized) ||
+    /[a-zA-Z]\d+/.test(normalized);
+  const hasProseConnectors = /\b(of|in|from|with|equals|each|row|triangle|numbers|paths|natural|specific|sum)\b/i.test(normalized);
+
+  return (hasOperator || hasMathStructure) && !hasProseConnectors;
+}
+
+function normalizeSuperscripts(expr: string): string {
+  const superMap: Record<string, string> = {
+    '²': '^2', '³': '^3', '⁴': '^4', '⁵': '^5',
+    '⁶': '^6', '⁷': '^7', '⁸': '^8', '⁹': '^9', '¹': '^1'
+  };
+
+  let normalized = expr;
+  for (const [uni, tex] of Object.entries(superMap)) {
+    normalized = normalized.replaceAll(uni, tex);
+  }
+
+  return normalized;
+}
+
+function formatProseAsLatex(text: string): string {
+  const normalized = normalizeSuperscripts(text);
+  const mathFragmentPattern = /([A-Za-z0-9()]+(?:\^\{?[A-Za-z0-9+\-]+\}?))/g;
+  const parts = normalized.split(mathFragmentPattern).filter(Boolean);
+  const isMathFragment = /^[A-Za-z0-9()]+(?:\^\{?[A-Za-z0-9+\-]+\}?)$/;
+
+  return parts
+    .map(part => (isMathFragment.test(part) ? part : `\\text{${escapeLatexText(part)}}`))
+    .join(' ');
+}
+
+function escapeLatexText(text: string): string {
+  return text
+    .replace(/\\/g, '\\textbackslash{}')
+    .replace(/([{}#$%&_])/g, '\\$1')
+    .replace(/\^/g, '\\textasciicircum{}')
+    .replace(/~/g, '\\textasciitilde{}');
 }
