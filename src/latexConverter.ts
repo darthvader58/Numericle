@@ -143,8 +143,13 @@ export function descriptionToLatex(description: string): string {
     return `a_n = n + S(n)`;
   }
 
+  // --- Divisor sum: sum of all positive divisors of n ---
+  if (/sum of (all )?divisors/i.test(description)) {
+    return `a_n = \\sum_{d \\mid n} d`;
+  }
+
   // Fallback: try to convert the hint directly
-  const fallback = exprToLatex(hint);
+  const fallback = looksLikeMathExpression(hint) ? exprToLatex(hint) : null;
   if (fallback) {
     return `a_n = ${fallback}`;
   }
